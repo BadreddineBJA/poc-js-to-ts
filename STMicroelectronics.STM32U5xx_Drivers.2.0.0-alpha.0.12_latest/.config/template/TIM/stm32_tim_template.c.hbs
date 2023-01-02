@@ -1,0 +1,268 @@
+{{! New template proposal to work with the HOOKS ~}}
+{{! get_myctx returns ~
+                instances: [...SWinstances],
+                resource:element.resource.toUpperCase(),
+    We may, in the future, also get the grouping strategy in this context object.
+    Today the HOOK has only 1 strategy: grouping all SW instances piloting the same HW instance.
+}}
+{{! This is a temporary solution while waiting for the getters ~}}
+{{#get_myctx~}}
+{{#with _myctx~}}
+{{log "TIM template _myctx:" this~}}
+{{assign 'current_resource' this.resource~}}
+{{log "TIM template current_resource:" @root.current_resource~}}
+/**
+  ******************************************************************************
+  * @file           : stm32_{{lowercase @root.current_resource}}.c
+  * @brief          : Peripheral initialization
+  *                   File per peripheral instance that is handling the peripheral
+  *                   initialization and the IRQ handlers. Init parameters provided
+  *                   as a set of defines configurable/generated for a given target
+  *                   through the  hal_tim_settings.json and the config tool.
+  ******************************************************************************
+  * @attention
+  *
+  * <h2><center>&copy; Copyright (c) {{COPYRIGHT}} STMicroelectronics.
+  * All rights reserved.</center></h2>
+  *
+  * This software is licensed under terms that can be found in the LICENSE file
+  * in the root directory of this software component.
+  * If no LICENSE file comes with this software, it is provided AS-IS.
+  *
+  ******************************************************************************
+  */
+
+/* Includes ------------------------------------------------------------------*/
+#include "stm32_{{lowercase @root.current_resource}}.h"
+
+/* Private typedef -----------------------------------------------------------*/
+/* Private define ------------------------------------------------------------*/
+/* Private macro -------------------------------------------------------------*/
+/* Private variables ---------------------------------------------------------*/
+/* Private functions prototype------------------------------------------------*/
+{{! declare all prototypes for all configs of all SW instances}}
+{{log "==> declare all MSP prototypes for all configs of all SW instances"~}}
+{{#each this.instances~}}
+{{assign 'current_instance_index' instanceid~}}
+{{log "TIM template MSP current_instance_index:" @root.current_instance_index~}}
+{{#each this.configs}}
+static void {{lowercase @root.current_resource}}_instance{{@root.current_instance_index}}{{addConfigLC cfg_name}}_msp_init(TIM_HandleTypeDef *ph_tim);
+static void {{lowercase @root.current_resource}}_instance{{@root.current_instance_index}}{{addConfigLC cfg_name}}_msp_deinit(TIM_HandleTypeDef *ph_tim);
+{{/each}}
+{{/each}}
+
+/* Exported variables by reference--------------------------------------------*/
+/* TODO : we will need 1 handle per SW instance */
+{{! Only 1 handle for all sw instances: this works if we have only 1 functionality and 1 API level but WILL BE UPDATED}}
+{{! each SW instance can have an alias to this handle}}
+{{log "==> declare handle for: " @root.current_resource~}}
+static TIM_HandleTypeDef gh_{{lowercase @root.current_resource}};
+
+{{#each this.instances}}
+{{assign 'current_instance_index' instanceid~}}
+{{log "UART template INIT current_instance_index:" @root.current_instance_index~}}
+{{#each this.configs}}
+
+void *{{lowercase @root.current_resource}}_instance{{@root.current_instance_index}}{{addConfigLC cfg_name}}_init(void)
+{
+{{#if TIM_MasterConfigTypeDef}}
+  TIM_MasterConfigTypeDef s_master_config = {0xFFFFFFFF};
+{{/if}}
+{{#if TIM_BreakDeadTimeConfigTypeDef}}
+  TIM_BreakDeadTimeConfigTypeDef s_breakdeadtime_config = {0xFFFFFFFF};
+{{/if}}
+{{#if TIM_ClockConfigTypeDef}}
+  TIM_ClockConfigTypeDef s_clock_config = {0xFFFFFFFF};
+{{/if}}
+{{#if TIM_Encoder_InitTypeDef}}
+  TIM_Encoder_InitTypeDef s_encoder_init = {0xFFFFFFFF};
+{{/if}}
+{{#if TIM_SlaveConfigTypeDef}}
+  TIM_SlaveConfigTypeDef s_slave_config = {0xFFFFFFFF};
+{{/if}}
+
+  /* Configure {{lowercase @root.current_resource}} */
+  gh_{{lowercase @root.current_resource}}.Instance               = {{@root.current_resource}};
+{{#each TIM_Base_InitTypeDef}}
+{{#if (eq @key 'AutoReloadPreload')}}
+  gh_{{lowercase @root.current_resource}}.Init.{{@key}} = TIM_AUTORELOAD_PRELOAD_{{#if this}}ENABLE{{else}}DISABLE{{/if}};
+{{else if (eq @key 'ClockDivision')}}
+  gh_{{lowercase @root.current_resource}}.Init.{{@key}} = TIM_CLOCKDIVISION_DIV{{this}};
+{{else}}
+  gh_{{lowercase @root.current_resource}}.Init.{{@key}} = {{this}};
+{{/if}}
+{{/each}}
+
+  HAL_TIM_RegisterCallback(&gh_{{lowercase @root.current_resource}}, HAL_TIM_BASE_MSPINIT_CB_ID, {{lowercase @root.current_resource}}_instance{{@root.current_instance_index}}{{addConfigLC cfg_name}}_msp_init);
+  HAL_TIM_RegisterCallback(&gh_{{lowercase @root.current_resource}}, HAL_TIM_BASE_MSPDEINIT_CB_ID, {{lowercase @root.current_resource}}_instance{{@root.current_instance_index}}{{addConfigLC cfg_name}}_msp_deinit);
+
+  if (HAL_TIM_Base_Init(&gh_{{lowercase @root.current_resource}}) != HAL_OK)
+  {
+    return NULL;
+  }
+
+{{#if TIM_BreakDeadTimeConfigTypeDef}}
+{{#each TIM_BreakDeadTimeConfigTypeDef}}
+  s_breakdeadtime_config.{{@key}} = {{this}};
+{{/each}}
+  if (HAL_TIMEx_ConfigBreakDeadTime(&gh_{{lowercase @root.current_resource}}, &s_breakdeadtime_config) != HAL_OK)
+  {
+    return NULL;
+  }
+
+{{/if}}
+{{#if TIM_ClockConfigTypeDef}}
+{{#each TIM_ClockConfigTypeDef}}
+  s_clock_config.{{@key}} = {{this}};
+{{/each}}
+  if (HAL_TIM_ConfigClockSource(&gh_{{lowercase @root.current_resource}}, &s_clock_config) != HAL_OK)
+  {
+    return NULL;
+  }
+
+{{/if}}
+{{#if TIM_Encoder_InitTypeDef}}
+{{#each TIM_Encoder_InitTypeDef}}
+  s_encoder_init.{{@key}} = {{this}};
+{{/each}}
+  if (HAL_TIM_Encoder_Init(&gh_{{lowercase @root.current_resource}}, &s_encoder_init) != HAL_OK)
+  {
+    return NULL;
+  }
+
+{{/if}}
+{{#if TIM_MasterConfigTypeDef}}
+{{#each TIM_MasterConfigTypeDef}}
+  s_master_config.{{@key}} = {{this}};
+{{/each}}
+  if (HAL_TIMEx_MasterConfigSynchronization(&gh_{{lowercase @root.current_resource}}, &s_master_config) != HAL_OK)
+  {
+    return NULL;
+  }
+
+{{/if}}
+{{#if TIM_SlaveConfigTypeDef}}
+{{#each TIM_SlaveConfigTypeDef}}
+{{#if (eq @key 'TriggerPrescaler')}}
+  s_slave_config.{{@key}} = TIM_TRIGGERPRESCALER_DIV{{this}};
+{{else}}
+  s_slave_config.{{@key}} = {{this}};
+{{/if}}
+{{/each}}
+  if (HAL_TIM_SlaveConfigSynchro(&gh_{{lowercase @root.current_resource}}, &s_slave_config) != HAL_OK)
+  {
+    return NULL;
+  }
+
+{{/if}}
+{{#each channels}}
+{{#if TIM_ClearInputConfigTypeDef}}
+  {
+    TIM_ClearInputConfigTypeDef s_clearinput_config = {0xFFFFFFFF};
+{{#each TIM_ClearInputConfigTypeDef}}
+{{#if (eq @key 'ClearInputState')}}
+    s_clearinput_config.{{@key}} = {{#if this}}ENABLE{{else}}DISABLE{{/if}};
+{{else if (eq @key 'ClearInputPrescaler')}}
+    s_clearinput_config.{{@key}} = TIM_CLEARINPUTPRESCALER_DIV{{this}};
+{{else}}
+    s_clearinput_config.{{@key}} = {{this}};
+{{/if}}
+{{/each}}
+    if (HAL_TIM_ConfigOCrefClear(&gh_{{lowercase @root.current_resource}}, &s_clearinput_config, TIM_CHANNEL_{{channel}}) != HAL_OK)
+    {
+      return NULL;
+    }
+  }
+{{/if}}
+{{#if (eq mode 0)}}
+{{#if TIM_IC_InitTypeDef}}
+  {
+    TIM_IC_InitTypeDef s_ic_init = {0xFFFFFFFF};
+{{#each TIM_IC_InitTypeDef}}
+    s_ic_init.{{@key}} = {{this}};
+{{/each}}
+    if (HAL_TIM_IC_ConfigChannel(&gh_{{lowercase @root.current_resource}}, &s_ic_init, TIM_CHANNEL_{{channel}}) != HAL_OK)
+    {
+      return NULL;
+    }
+  }
+{{/if}}
+{{else if (eq mode 1)}}
+{{#if TIM_OC_InitTypeDef}}
+  {
+    TIM_OC_InitTypeDef s_oc_init = {0xFFFFFFFF};
+{{#each TIM_OC_InitTypeDef}}
+    s_oc_init.{{@key}} = {{this}};
+{{/each}}
+    if (HAL_TIM_PWM_ConfigChannel(&gh_{{lowercase @root.current_resource}}, &s_oc_init, TIM_CHANNEL_{{channel}}) != HAL_OK)
+    {
+      return NULL;
+    }
+  }
+{{/if}}
+{{else}} {{! Output compare }}
+{{#if TIM_OC_InitTypeDef}}
+  {
+    TIM_OC_InitTypeDef s_oc_init = {0xFFFFFFFF};
+{{#each TIM_OC_InitTypeDef}}
+    s_oc_init.{{@key}} = {{this}};
+{{/each}}
+    if (HAL_TIM_OC_ConfigChannel(&gh_{{lowercase @root.current_resource}}, &s_oc_init, TIM_CHANNEL_{{channel}}) != HAL_OK)
+    {
+      return NULL;
+    }
+  }
+{{/if}}
+{{/if}}
+{{/each}}
+
+  return (void *)&gh_{{lowercase @root.current_resource}};
+}
+
+{{/each}}
+{{/each}}
+
+void {{lowercase @root.current_resource}}_deinit(void)
+{
+  (void)HAL_TIM_Base_DeInit(&gh_{{lowercase @root.current_resource}});
+}
+
+void *{{lowercase @root.current_resource}}_getobject(void)
+{
+  return (void *)&gh_{{lowercase @root.current_resource}};
+}
+
+/* Private functions definition ----------------------------------------------*/
+{{#each this.instances}}
+{{assign 'current_instance_index' instanceid~}}
+{{#each configs}}
+{{assign 'current_settings' this~}}
+{{assign 'current_cfg_name' cfg_name~}}
+/**
+  * @brief {{lowercase @root.current_resource}}{{addConfigLC cfg_name}} MSP Initialization
+  * This function configures the hardware resources used in this example
+  * @param ph_tim  {{lowercase @root.current_resource}}{{addConfigLC cfg_name}} handle pointer
+  * @retval None
+  */
+static void {{lowercase @root.current_resource}}_instance{{@root.current_instance_index}}{{addConfigLC cfg_name}}_msp_init(TIM_HandleTypeDef *ph_tim)
+{
+  /* Peripheral clock enable */
+  __HAL_RCC_{{@root.current_resource}}_CLK_ENABLE();
+{{#> GPIO step='init'  cfg_name=@root.current_cfg_name}}
+#warning "GPIO service not present"
+{{/GPIO}}
+}
+
+static void {{lowercase @root.current_resource}}_instance{{@root.current_instance_index}}{{addConfigLC cfg_name}}_msp_deinit(TIM_HandleTypeDef *ph_tim)
+{
+  /* Peripheral clock disable */
+  __HAL_RCC_{{@root.current_resource}}_CLK_DISABLE();
+{{#> GPIO step='deinit'  cfg_name=@root.current_cfg_name}}
+{{/GPIO}}
+}
+
+{{/each}}
+{{/each}}
+
+{{/with~}}
+{{/get_myctx~}}

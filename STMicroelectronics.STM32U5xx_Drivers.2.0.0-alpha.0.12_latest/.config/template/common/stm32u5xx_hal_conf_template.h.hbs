@@ -1,0 +1,331 @@
+/**
+  ******************************************************************************
+  * @file    stm32u5xx_hal_conf.h
+  * @author  MCD Application Team
+  * @brief   HAL configuration file
+  ******************************************************************************
+  * @attention
+  *
+  * <h2><center>&copy; Copyright (c) {{COPYRIGHT}} STMicroelectronics.
+  * All rights reserved.</center></h2>
+  *
+  *{{LICENSE}}
+  *
+  ******************************************************************************
+  */
+
+/* Define to prevent recursive inclusion -------------------------------------*/
+#ifndef STM32U5xx_HAL_CONF_H
+#define STM32U5xx_HAL_CONF_H
+
+#ifdef __cplusplus
+extern "C" {
+#endif
+
+/* Exported types ------------------------------------------------------------*/
+/* Exported constants --------------------------------------------------------*/
+
+/* ########################## Module Selection ############################## */
+/**
+  * @brief This is the list of modules to be used in the HAL driver
+  */
+#define USE_HAL_MODULE            1U
+#define USE_HAL_ADC_MODULE        {{@root.ContextAPI.isActivatedModule 'ADC'~}}U
+#define USE_HAL_COMP_MODULE       {{@root.ContextAPI.isActivatedModule 'COMP'~}}U
+#define USE_HAL_CORDIC_MODULE     {{@root.ContextAPI.isActivatedModule 'CORDIC'~}}U
+#define USE_HAL_CORTEX_MODULE     {{@root.ContextAPI.isActivatedModule 'CORTEX'~}}U
+#define USE_HAL_CRC_MODULE        {{@root.ContextAPI.isActivatedModule 'CRC'~}}U
+#define USE_HAL_CRYP_MODULE       {{@root.ContextAPI.isActivatedModule 'CRYP'~}}U
+#define USE_HAL_DAC_MODULE        {{@root.ContextAPI.isActivatedModule 'DAC'~}}U
+#define USE_HAL_DCACHE_MODULE     {{@root.ContextAPI.isActivatedModule 'DCACHE'~}}U
+#define USE_HAL_DCMI_MODULE       {{@root.ContextAPI.isActivatedModule 'DCMI'~}}U
+#define USE_HAL_DMA_MODULE        {{@root.ContextAPI.isActivatedModule 'DMA'~}}U
+#define USE_HAL_DMA2D_MODULE      {{@root.ContextAPI.isActivatedModule 'DMA2D'~}}U
+#define USE_HAL_DSI_MODULE        {{@root.ContextAPI.isActivatedModule 'DSI'~}}U
+#define USE_HAL_EXTI_MODULE       {{@root.ContextAPI.isActivatedModule 'EXTI'~}}U
+#define USE_HAL_FDCAN_MODULE      {{@root.ContextAPI.isActivatedModule 'FDCAN'~}}U
+#if 0
+#define USE_HAL_FLASH_MODULE      {{@root.ContextAPI.isActivatedModule 'FLASH'~}}U
+#else
+/* Miss dependancie between FLASH and RCC */
+#define USE_HAL_FLASH_MODULE      1U
+#endif
+#define USE_HAL_FMAC_MODULE       {{@root.ContextAPI.isActivatedModule 'FMAC'~}}U
+#define USE_HAL_GFXMMU_MODULE     {{@root.ContextAPI.isActivatedModule 'GFXMMU'~}}U
+#define USE_HAL_GPIO_MODULE       {{@root.ContextAPI.isActivatedModule 'GPIO'~}}U
+#define USE_HAL_GPU2D_MODULE      {{@root.ContextAPI.isActivatedModule 'GPU2D'~}}U
+#define USE_HAL_GTZC_MODULE       {{@root.ContextAPI.isActivatedModule 'GTZC'~}}U
+#define USE_HAL_HASH_MODULE       {{@root.ContextAPI.isActivatedModule 'HASH'~}}U
+#define USE_HAL_HCD_MODULE        {{@root.ContextAPI.isActivatedModule 'HCD'~}}U
+#define USE_HAL_I2C_MODULE        {{@root.ContextAPI.isActivatedModule 'I2C'~}}U
+#define USE_HAL_ICACHE_MODULE     {{@root.ContextAPI.isActivatedModule 'ICACHE'~}}U
+#define USE_HAL_IRDA_MODULE       {{@root.ContextAPI.isActivatedModule 'IRDA'~}}U
+#define USE_HAL_IWDG_MODULE       {{@root.ContextAPI.isActivatedModule 'IWDG'~}}U
+#define USE_HAL_LPTIM_MODULE      {{@root.ContextAPI.isActivatedModule 'LPTIM'~}}U
+#define USE_HAL_LTDC_MODULE       {{@root.ContextAPI.isActivatedModule 'LTDC'~}}U
+#define USE_HAL_MDF_MODULE        {{@root.ContextAPI.isActivatedModule 'MDF'~}}U
+#define USE_HAL_MMC_MODULE        {{@root.ContextAPI.isActivatedModule 'MMC'~}}U
+#define USE_HAL_NAND_MODULE       {{@root.ContextAPI.isActivatedModule 'NAND'~}}U
+#define USE_HAL_NOR_MODULE        {{@root.ContextAPI.isActivatedModule 'NOR'~}}U
+#define USE_HAL_OPAMP_MODULE      {{@root.ContextAPI.isActivatedModule 'OPAMP'~}}U
+#define USE_HAL_OSPI_MODULE       {{@root.ContextAPI.isActivatedModule 'OSPI'~}}U
+#define USE_HAL_OTFDEC_MODULE     {{@root.ContextAPI.isActivatedModule 'OTFDEC'~}}U
+#define USE_HAL_PCD_MODULE        {{@root.ContextAPI.isActivatedModule 'PCD'~}}U
+#define USE_HAL_PKA_MODULE        {{@root.ContextAPI.isActivatedModule 'PKA'~}}U
+#define USE_HAL_PSSI_MODULE       {{@root.ContextAPI.isActivatedModule 'PSSI'~}}U
+#define USE_HAL_PWR_MODULE        {{@root.ContextAPI.isActivatedModule 'PWR'~}}U
+#define USE_HAL_RAMCFG_MODULE     {{@root.ContextAPI.isActivatedModule 'RAMCFG'~}}U
+#define USE_HAL_RCC_MODULE        {{@root.ContextAPI.isActivatedModule 'RCC'~}}U
+#define USE_HAL_RNG_MODULE        {{@root.ContextAPI.isActivatedModule 'RNG'~}}U
+#define USE_HAL_RTC_MODULE        {{@root.ContextAPI.isActivatedModule 'RTC'~}}U
+#define USE_HAL_SAI_MODULE        {{@root.ContextAPI.isActivatedModule 'SAI'~}}U
+#define USE_HAL_SD_MODULE         {{@root.ContextAPI.isActivatedModule 'SD'~}}U
+#define USE_HAL_SMARTCARD_MODULE  {{@root.ContextAPI.isActivatedModule 'SMARTCARD'~}}U
+#define USE_HAL_SMBUS_MODULE      {{@root.ContextAPI.isActivatedModule 'SMBUS'~}}U
+#define USE_HAL_SPI_MODULE        {{@root.ContextAPI.isActivatedModule 'SPI'~}}U
+#define USE_HAL_SRAM_MODULE       {{@root.ContextAPI.isActivatedModule 'SRAM'~}}U
+#define USE_HAL_TIM_MODULE        {{@root.ContextAPI.isActivatedModule 'TIM'~}}U
+#define USE_HAL_TSC_MODULE        {{@root.ContextAPI.isActivatedModule 'TSC'~}}U
+#define USE_HAL_UART_MODULE       {{@root.ContextAPI.isActivatedModule 'UART'~}}U
+#define USE_HAL_USART_MODULE      {{@root.ContextAPI.isActivatedModule 'USART'~}}U
+#define USE_HAL_WWDG_MODULE       {{@root.ContextAPI.isActivatedModule 'WWDG'~}}U
+#define USE_HAL_XSPI_MODULE       {{@root.ContextAPI.isActivatedModule 'XSPI'~}}U
+
+#if 0
+/* ########################### System Configuration ######################### */
+/**
+  * @brief This is the HAL system configuration section
+  */
+#define  VDD_VALUE                    {{resources.system.vdd_value}}U /*!< Value of VDD in mv */
+#define  TICK_INT_PRIORITY            {{{resources.system.tick_init_priority}}}  /*!< tick interrupt priority (lowest by default) */
+#define  PREFETCH_ENABLE              {{#if resources.system.prefetch_enable}}1U{{else}}0U{{/if}} /*!< Enable prefetch */
+
+/* ########################## HAL OS configuration ########################## */
+/**
+  * @brief Used by the HAL PPP Acquire/Release APIs when the define USE_HAL_MUTEX is set to 1
+  */
+#define USE_HAL_MUTEX    {{#if resources.system.hal_mutex}}1U{{else}}0U{{/if}}
+
+/* ########################## Assert Selection ############################## */
+/**
+  * @brief Enable or disable the "assert_dbg_param" macro in the HAL drivers code
+  */
+#define USE_ASSERT_DBG_STATE    {{#if resources.system.assert_dbg_param}}1U{{else}}0U{{/if}}
+
+/* ########################## Assert Selection ############################## */
+/**
+  * @brief Enable or disable the "assert_dbg_param" macro in the HAL drivers code
+  */
+#define USE_ASSERT_DBG_STATE    {{#if resources.system.assert_dbg_param}}1U{{else}}0U{{/if}}
+
+/* ########################## HAL API parameters check  ##################### */
+/**
+  * @brief Run time parameter check activation
+  */
+#define USE_HAL_CHECK_PARAM    {{#if resources.system.check_param}}1U{{else}}0U{{/if}}
+
+/* ########################## State transition   ############################ */
+/**
+  * @brief Enable protection of state transition in thread safe
+  */
+#define USE_HAL_CHECK_PROCESS_STATE    {{#if resources.system.check_process_state}}1U{{else}}0U{{/if}}
+
+/* ################## Register callback feature configuration ############### */
+/**
+  * @brief Set below the peripheral configuration  to "1U" to add the support
+  *        of HAL callback registration/unregistration feature for the HAL
+  *        driver(s). This allows user application to provide specific callback
+  *        functions thanks to HAL_PPP_RegisterCallback() rather than overwriting
+  *        the default weak callback functions (see each stm32u5xx_hal_ppp.h file
+  *        for possible callback identifiers defined in HAL_PPP_CallbackIDTypeDef
+  *        for each PPP peripheral).
+  */
+#define USE_HAL_ADC_REGISTER_CALLBACKS          {{helper_common_get_register_callback this 'ADC'~}}U
+#define USE_HAL_COMP_REGISTER_CALLBACKS         {{helper_common_get_register_callback this 'COMP'~}}U
+#define USE_HAL_CORDIC_REGISTER_CALLBACKS       {{helper_common_get_register_callback this 'CORDIC'~}}U
+#define USE_HAL_CORTEX_REGISTER_CALLBACKS       {{helper_common_get_register_callback this 'CORTEX'~}}U
+#define USE_HAL_CRC_REGISTER_CALLBACKS          {{helper_common_get_register_callback this 'CRC'~}}U
+#define USE_HAL_CRYP_REGISTER_CALLBACKS         {{helper_common_get_register_callback this 'CRYP'~}}U
+#define USE_HAL_DAC_REGISTER_CALLBACKS          {{helper_common_get_register_callback this 'DAC'~}}U
+#define USE_HAL_DCACHE_REGISTER_CALLBACKS       {{helper_common_get_register_callback this 'DCACHE'~}}U
+#define USE_HAL_DCMI_REGISTER_CALLBACKS         {{helper_common_get_register_callback this 'DCMI'~}}U
+#define USE_HAL_DMA_REGISTER_CALLBACKS          {{helper_common_get_register_callback this 'DMA'~}}U
+#define USE_HAL_DMA2D_REGISTER_CALLBACKS        {{helper_common_get_register_callback this 'DMA2D'~}}U
+#define USE_HAL_DSI_REGISTER_CALLBACKS          {{helper_common_get_register_callback this 'DSI'~}}U
+#define USE_HAL_EXTI_REGISTER_CALLBACKS         {{helper_common_get_register_callback this 'EXTI'~}}U
+#define USE_HAL_FDCAN_REGISTER_CALLBACKS        {{helper_common_get_register_callback this 'FDCAN'~}}U
+#define USE_HAL_FLASH_REGISTER_CALLBACKS        {{helper_common_get_register_callback this 'FLASH'~}}U
+#define USE_HAL_FMAC_REGISTER_CALLBACKS         {{helper_common_get_register_callback this 'FMAC'~}}U
+#define USE_HAL_GFXMMU_REGISTER_CALLBACKS       {{helper_common_get_register_callback this 'GFXMMU'~}}U
+#define USE_HAL_GPIO_REGISTER_CALLBACKS         {{helper_common_get_register_callback this 'GPIO'~}}U
+#define USE_HAL_GPU2D_REGISTER_CALLBACKS        {{helper_common_get_register_callback this 'GPU2D'~}}U
+#define USE_HAL_GTZC_REGISTER_CALLBACKS         {{helper_common_get_register_callback this 'GTZC'~}}U
+#define USE_HAL_HASH_REGISTER_CALLBACKS         {{helper_common_get_register_callback this 'HASH'~}}U
+#define USE_HAL_HCD_REGISTER_CALLBACKS          {{helper_common_get_register_callback this 'HCD'~}}U
+#define USE_HAL_I2C_REGISTER_CALLBACKS          {{helper_common_get_register_callback this 'I2C'~}}U
+#define USE_HAL_ICACHE_REGISTER_CALLBACKS       {{helper_common_get_register_callback this 'ICACHE'~}}U
+#define USE_HAL_IRDA_REGISTER_CALLBACKS         {{helper_common_get_register_callback this 'IRDA'~}}U
+#define USE_HAL_IWDG_REGISTER_CALLBACKS         {{helper_common_get_register_callback this 'IWDG'~}}U
+#define USE_HAL_LPTIM_REGISTER_CALLBACKS        {{helper_common_get_register_callback this 'LPTIM'~}}U
+#define USE_HAL_LTDC_REGISTER_CALLBACKS         {{helper_common_get_register_callback this 'LTDC'~}}U
+#define USE_HAL_MDF_REGISTER_CALLBACKS          {{helper_common_get_register_callback this 'MDF'~}}U
+#define USE_HAL_MMC_REGISTER_CALLBACKS          {{helper_common_get_register_callback this 'MMC'~}}U
+#define USE_HAL_NAND_REGISTER_CALLBACKS         {{helper_common_get_register_callback this 'NAND'~}}U
+#define USE_HAL_NOR_REGISTER_CALLBACKS          {{helper_common_get_register_callback this 'NOR'~}}U
+#define USE_HAL_OPAMP_REGISTER_CALLBACKS        {{helper_common_get_register_callback this 'OPAMP'~}}U
+#define USE_HAL_OSPI_REGISTER_CALLBACKS         {{helper_common_get_register_callback this 'OSPI'~}}U
+#define USE_HAL_OTFDEC_REGISTER_CALLBACKS       {{helper_common_get_register_callback this 'OTFDEC'~}}U
+#define USE_HAL_PCD_REGISTER_CALLBACKS          {{helper_common_get_register_callback this 'PCD'~}}U
+#define USE_HAL_PKA_REGISTER_CALLBACKS          {{helper_common_get_register_callback this 'PKA'~}}U
+#define USE_HAL_PSSI_REGISTER_CALLBACKS         {{helper_common_get_register_callback this 'PSSI'~}}U
+#define USE_HAL_PWR_REGISTER_CALLBACKS          {{helper_common_get_register_callback this 'PWR'~}}U
+#define USE_HAL_RAMCFG_REGISTER_CALLBACKS       {{helper_common_get_register_callback this 'RAMCFG'~}}U
+#define USE_HAL_RCC_REGISTER_CALLBACKS          {{helper_common_get_register_callback this 'RCC'~}}U
+#define USE_HAL_RNG_REGISTER_CALLBACKS          {{helper_common_get_register_callback this 'RNG'~}}U
+#define USE_HAL_RTC_REGISTER_CALLBACKS          {{helper_common_get_register_callback this 'RTC'~}}U
+#define USE_HAL_SAI_REGISTER_CALLBACKS          {{helper_common_get_register_callback this 'SAI'~}}U
+#define USE_HAL_SD_REGISTER_CALLBACKS           {{helper_common_get_register_callback this 'SD'~}}U
+#define USE_HAL_SMARTCARD_REGISTER_CALLBACKS    {{helper_common_get_register_callback this 'SMARTCARD'~}}U
+#define USE_HAL_SMBUS_REGISTER_CALLBACKS        {{helper_common_get_register_callback this 'SMBUS'~}}U
+#define USE_HAL_SPI_REGISTER_CALLBACKS          {{helper_common_get_register_callback this 'SPI'~}}U
+#define USE_HAL_SRAM_REGISTER_CALLBACKS         {{helper_common_get_register_callback this 'SRAM'~}}U
+#define USE_HAL_TIM_REGISTER_CALLBACKS          {{helper_common_get_register_callback this 'TIM'~}}U
+#define USE_HAL_TSC_REGISTER_CALLBACKS          {{helper_common_get_register_callback this 'TSC'~}}U
+#define USE_HAL_UART_REGISTER_CALLBACKS         {{helper_common_get_register_callback this 'UART'~}}U
+#define USE_HAL_USART_REGISTER_CALLBACKS        {{helper_common_get_register_callback this 'USART'~}}U
+#define USE_HAL_WWDG_REGISTER_CALLBACKS         {{helper_common_get_register_callback this 'WWDG'~}}U
+#define USE_HAL_XSPI_REGISTER_CALLBACKS         {{helper_common_get_register_callback this 'XSPI'~}}U
+
+/* ########################## DMA Module Services Selection ############################# */
+/**
+  * @brief This is the list of modules that uses HAL DMA services
+  */
+#define USE_HAL_ADC_DMA       {{helper_common_get_dma_activation this 'ADC'~}}U
+#define USE_HAL_CORDIC_DMA    {{helper_common_get_dma_activation this 'CORDIC'~}}U
+#define USE_HAL_CRYP_DMA      {{helper_common_get_dma_activation this 'CRYP'~}}U
+#define USE_HAL_DAC_DMA       {{helper_common_get_dma_activation this 'DAC'~}}U
+#define USE_HAL_DCMI_DMA      {{helper_common_get_dma_activation this 'DCMI'~}}U
+#define USE_HAL_FMAC_DMA      {{helper_common_get_dma_activation this 'FMAC'~}}U
+#define USE_HAL_HASH_DMA      {{helper_common_get_dma_activation this 'HASH'~}}U
+#define USE_HAL_I2C_DMA       {{helper_common_get_dma_activation this 'I2C'~}}U
+#define USE_HAL_IRDA_DMA      {{helper_common_get_dma_activation this 'IRDA'~}}U
+#define USE_HAL_LPTIM_DMA     {{helper_common_get_dma_activation this 'LPTIM'~}}U
+#define USE_HAL_MDF_DMA       {{helper_common_get_dma_activation this 'MDF'~}}U
+#define USE_HAL_OSPI_DMA      {{helper_common_get_dma_activation this 'OSPI'~}}U
+#define USE_HAL_PSSI_DMA      {{helper_common_get_dma_activation this 'PSSI'~}}U
+#define USE_HAL_SAI_DMA       {{helper_common_get_dma_activation this 'SAI'~}}U
+#define USE_HAL_SMARTCARD_DMA {{helper_common_get_dma_activation this 'SMARTCARD'~}}U
+#define USE_HAL_SPI_DMA       {{helper_common_get_dma_activation this 'SPI'~}}U
+#define USE_HAL_SRAM_DMA      {{helper_common_get_dma_activation this 'SRAM'~}}U
+#define USE_HAL_TIM_DMA       {{helper_common_get_dma_activation this 'TIM'~}}U
+#define USE_HAL_UART_DMA      {{helper_common_get_dma_activation this 'UART'~}}U
+#define USE_HAL_USART_DMA     {{helper_common_get_dma_activation this 'USART'~}}U
+#define USE_HAL_XSPI_DMA      {{helper_common_get_dma_activation this 'XSPI'~}}U
+
+/* ########################## Peripheral clock gating  ############################# */
+/**
+  * @brief This clock activation is done inside each PPP
+  *        Each PPP can be configured independately in using defined available in stm32u5xx_hal_def.h)
+  *           @arg HAL_CLK_ENABLE_NO                No clock activation in PPP
+  *           @arg HAL_CLK_ENABLE_PERIPH_ONLY       PERIPH Clock activation only
+  *           @arg HAL_CLK_ENABLE_PERIPH_PWR_SYSTEM PERIPH Clock activation including PWR and/or system
+  */
+
+#define USE_HAL_I2C_CLK_ENABLE_MODEL  {{resources.system.i2c_clk_enable_model}}
+#define USE_HAL_GPIO_CLK_ENABLE_MODEL {{resources.system.gpio_clk_enable_model}}
+
+
+/* ################## SPI peripheral configuration ########################## */
+
+/* CRC FEATURE: Use to activate CRC feature inside HAL SPI Driver
+ * Activated: CRC code is present inside driver
+ * Deactivated: CRC code cleaned from driver
+ */
+#define USE_SPI_CRC                   {{#if resources.system.use_spi_crc}}1U{{else}}0U{{/if}}
+
+/* ################## SDMMC peripheral configuration ######################### */
+
+#define USE_SD_TRANSCEIVER            {{#if resources.system.use_sd_transmitter}}1U{{else}}0U{{/if}}
+
+#else
+
+/* ########################### System Configuration ######################### */
+/**
+  * brief This is the HAL system configuration section
+  */
+#define  VDD_VALUE                    3300UL /*!< Value of VDD in mv */
+#define  TICK_INT_PRIORITY            ((1UL<<__NVIC_PRIO_BITS) - 1UL)  /*!< tick interrupt priority (lowest by default) */
+#define  USE_RTOS                     0U
+#define  PREFETCH_ENABLE              1U               /*!< Enable prefetch */
+
+/* ################## Register callback feature configuration ############### */
+/**
+  * brief Set below the peripheral configuration  to "1U" to add the support
+  *        of HAL callback registration/unregistration feature for the HAL
+  *        driver(s). This allows user application to provide specific callback
+  *        functions thanks to HAL_PPP_RegisterCallback() rather than overwriting
+  *        the default weak callback functions (see each stm32u5xx_hal_ppp.h file
+  *        for possible callback identifiers defined in HAL_PPP_CallbackIDTypeDef
+  *        for each PPP peripheral).
+  */
+#define  USE_HAL_ADC_REGISTER_CALLBACKS        0U /* ADC register callback disabled       */
+#define  USE_HAL_COMP_REGISTER_CALLBACKS       0U /* COMP register callback disabled      */
+#define  USE_HAL_CORDIC_REGISTER_CALLBACKS     0U /* CORDIC register callback disabled    */
+#define  USE_HAL_CRYP_REGISTER_CALLBACKS       0U /* CRYP register callback disabled      */
+#define  USE_HAL_DAC_REGISTER_CALLBACKS        0U /* DAC register callback disabled       */
+#define  USE_HAL_DCMI_REGISTER_CALLBACKS       0U /* DCMI register callback disabled      */
+#define  USE_HAL_DMA2D_REGISTER_CALLBACKS      0U /* DMA2D register callback disabled     */
+#define  USE_HAL_ETH_REGISTER_CALLBACKS        0U /* ETH register callback disabled       */
+#define  USE_HAL_FDCAN_REGISTER_CALLBACKS      0U /* FDCAN register callback disabled     */
+#define  USE_HAL_FMAC_REGISTER_CALLBACKS       0U /* FMAC register callback disabled      */
+#define  USE_HAL_HASH_REGISTER_CALLBACKS       0U /* HASH register callback disabled      */
+#define  USE_HAL_HCD_REGISTER_CALLBACKS        0U /* HCD register callback disabled       */
+#define  USE_HAL_I2C_REGISTER_CALLBACKS        0U /* I2C register callback disabled       */
+#define  USE_HAL_IWDG_REGISTER_CALLBACKS       0U /* IWDG register callback disabled      */
+#define  USE_HAL_IRDA_REGISTER_CALLBACKS       0U /* IRDA register callback disabled      */
+#define  USE_HAL_LPTIM_REGISTER_CALLBACKS      0U /* LPTIM register callback disabled     */
+#define  USE_HAL_LTDC_REGISTER_CALLBACKS       0U /* LTDC register callback disabled      */
+#define  USE_HAL_MDF_REGISTER_CALLBACKS        0U /* MDF register callback disabled       */
+#define  USE_HAL_MMC_REGISTER_CALLBACKS        0U /* MMC register callback disabled       */
+#define  USE_HAL_NAND_REGISTER_CALLBACKS       0U /* NAND register callback disabled      */
+#define  USE_HAL_NOR_REGISTER_CALLBACKS        0U /* NOR register callback disabled       */
+#define  USE_HAL_OPAMP_REGISTER_CALLBACKS      0U /* MDIO register callback disabled      */
+#define  USE_HAL_OTFDEC_REGISTER_CALLBACKS     0U /* OTFDEC register callback disabled    */
+#define  USE_HAL_PCD_REGISTER_CALLBACKS        0U /* PCD register callback disabled       */
+#define  USE_HAL_PKA_REGISTER_CALLBACKS        0U /* PKA register callback disabled       */
+#define  USE_HAL_RAMCFG_REGISTER_CALLBACKS     0U /* RAMCFG register callback disabled    */
+#define  USE_HAL_RNG_REGISTER_CALLBACKS        0U /* RNG register callback disabled       */
+#define  USE_HAL_RTC_REGISTER_CALLBACKS        0U /* RTC register callback disabled       */
+#define  USE_HAL_SAI_REGISTER_CALLBACKS        0U /* SAI register callback disabled       */
+#define  USE_HAL_SD_REGISTER_CALLBACKS         0U /* SD register callback disabled        */
+#define  USE_HAL_SDRAM_REGISTER_CALLBACKS      0U /* SDRAM register callback disabled     */
+#define  USE_HAL_SMARTCARD_REGISTER_CALLBACKS  0U /* SMARTCARD register callback disabled */
+#define  USE_HAL_SMBUS_REGISTER_CALLBACKS      0U /* SMBUS register callback disabled     */
+#define  USE_HAL_SPI_REGISTER_CALLBACKS        0U /* SPI register callback disabled       */
+#define  USE_HAL_SRAM_REGISTER_CALLBACKS       0U /* SRAM register callback disabled      */
+#define  USE_HAL_TIM_REGISTER_CALLBACKS        0U /* TIM register callback disabled       */
+#define  USE_HAL_TSC_REGISTER_CALLBACKS        0U /* TSC register callback disabled       */
+#define  USE_HAL_UART_REGISTER_CALLBACKS       0U /* UART register callback disabled      */
+#define  USE_HAL_USART_REGISTER_CALLBACKS      0U /* USART register callback disabled     */
+#define  USE_HAL_WWDG_REGISTER_CALLBACKS       0U /* WWDG register callback disabled      */
+
+/* ################## SPI peripheral configuration ########################## */
+
+/* CRC FEATURE: Use to activate CRC feature inside HAL SPI Driver
+ * Activated: CRC code is present inside driver
+ * Deactivated: CRC code cleaned from driver
+ */
+#define USE_SPI_CRC                   0U
+
+/* ################## SDMMC peripheral configuration ######################### */
+
+#define USE_SD_TRANSCEIVER           0U               /*!< use uSD Transceiver */
+/*- Patch FRU */
+
+#endif /* 0 */
+
+#ifdef __cplusplus
+}
+#endif
+
+#endif /* STM32U5xx_HAL_CONF_H */

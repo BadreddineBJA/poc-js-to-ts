@@ -1,0 +1,149 @@
+{
+  "type": "object",
+  "additionalProperties": false,
+  "properties": {
+    "GPIO_InitTypeDef": {
+      "mode": {
+        "type": "object",
+        "description": "GPIO mode",
+        "oneOf": [
+          {
+            "title": "Input Floating Mode",
+            "const": {
+              "config": "INPUT",
+              "low_power": false
+            }
+          },
+          {
+            "title": "Output Push Pull Mode",
+            "const": {
+              "config": "OUTPUT_PP",
+              "low_power": false
+            }
+          },
+          {
+            "title": "Output Open Drain Mode",
+            "const": {
+              "config": "OUTPUT_OD",
+              "low_power": false
+            }
+          },
+          {
+            "actions": [
+              { "type": "exclude", "conditions": "$config.low_power" }
+            ],
+            "title": "Input Floating Mode (Low Power)",
+            "const": {
+              "config": "INPUT",
+              "low_power": true
+            }
+          },
+          {
+            "actions": [
+              { "type": "exclude", "conditions": "$config.low_power" }
+            ],
+            "title": "Output Push Pull Mode (Low Power)",
+            "const": {
+              "config": "OUTPUT_PP",
+              "low_power": true
+            }
+          },
+          {
+            "actions": [
+              { "type": "exclude", "conditions": "$config.low_power" }
+            ],
+            "title": "Output Open Drain Mode (Low Power)",
+            "const": {
+              "config": "OUTPUT_OD",
+              "low_power": true
+            }
+          },
+          {
+            "title": "Alternate Function Push Pull Mode",
+            "const": {
+              "config": "AF_PP"
+            }
+          },
+          {
+            "title": "Alternate Function Open Drain Mode",
+            "const": {
+              "config": "AF_OD"
+            }
+          },
+          {
+            "title": "Analog Mode",
+            "const": {
+              "config": "ANALOG"
+            }
+          }
+        ]
+      },
+      "speed": {
+        "type": "string",
+        "description": "GPIO speed",
+        "oneOf": [
+          {
+            "title": "LOW"
+          },
+          {
+            "title": "MEDIUM"
+          },
+          {
+            "title": "HIGH"
+          },
+          {
+            "title": "VERY_HIGH"
+          }
+        ]
+      },
+      "pull": {
+        "type": "string",
+        "description": "GPIO pull",
+        "oneOf": [
+          {
+            "const": "NOPULL"
+          },
+          {
+            "const": "PULLUP"
+          },
+          {
+            "const": "PULLDOWN"
+          }
+        ]
+      }
+    },
+    "security": {
+      "type": "boolean",
+      "description": "Pin set in secure mode, other being set non secured.",
+      "actions": [
+        { "type": "include", "conditions": "$sw.secure" }
+      ]
+    },
+    "high_speed_low_voltage": {
+      "type": "boolean",
+      "description": "HSLV mode",
+      "actions": [
+        { "type": "include", "conditions": "$resource.instance.hslv" }
+      ],
+      "default": false
+    },
+    "exti": {
+      "type": "boolean",
+      "description": "Enable EXTI line",
+      "actions": [{ "type": "exclude", "conditions": "$config.low_power" }]
+    },
+    "exti_trigger": {
+      "actions": [{ "type": "include", "conditions": "$config.exti" }],
+      "$include": {
+        "id": "exti_configuration.json",
+        "overlay": {
+          "Line": "$config.gpio.pin",
+          "GPIOSel": "EXTI_$config.gpio.port"
+        }
+      }
+    },
+    "label": {
+      "type": "string"
+    }
+  }
+}

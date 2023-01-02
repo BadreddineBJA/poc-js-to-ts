@@ -1,0 +1,991 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<package schemaVersion="1.6.0" xmlns:xs="http://www.w3.org/2001/XMLSchema-instance" xs:noNamespaceSchemaLocation="PACK.xsd" Dname="STM32U5*">
+  <vendor>STMicroelectronics</vendor>
+  <name>STM32U5xx_Drivers</name>
+  <description>STMicroelectronics STM32U5 series HAL and LL</description>
+  <url>https://artifacts.st.com/artifactory/mcd-cube2-packs-dev-local/STMicroelectronics.STM32U5xx_Drivers/</url>
+
+  <releases>
+    <release version="2.0.0-alpha.0.12" date="2022-10-03">
+      * version 7 used for bring-up (hack stm32_target.h)
+      * version 6 used for bring-up (alignment with sw-configuration-store.json)
+      * updates to use st:csolution
+      * codegen updates for Cube 2.0 bringup
+    </release>
+    <release version="2.0.0-alpha.0.11" date="2022-09-16">
+      ### Configuration items
+      * pdsc:  Add maxInstance to UART codeGen component
+      * pdsc:  file: use "/" in directory path
+      * pdsc, ip/tim, ip/gpio, ip/exti, ip/generic, ip/rcc:  Alignment on the naming conventions for components
+                resources declared inside the PDSC
+      * pdsc, ip/generic:  Enable both Windows and Linux support
+      * codegen updates for Cube 2.0 bringup
+    </release>
+    <release version="2.0.0-alpha.0.10" date="2022-09-13">
+      ### Configuration items
+
+      * ip/generic:  fix(hal-pdsc): DFP package name change (stm32u5xx_dfp)
+
+      * ip/generic:  Add mapping hook and update gen_code.bat
+
+      * ip/exti ip/generic ip/gpio ip/rcc ip/tim ip/uart:
+          rename helper fonctions with prefix helper_
+          add helper TIM.hbs in pdsc
+
+      * ip/tim:  simplify parameters.json to include only PWM generation
+
+      * ip/uart:  remove condition on IP versioning in waiting for a solution
+
+      * ip/generic: E3HAL-6709: BR component Device STM32 HAL TSC seen as Timer by component browser
+
+      * ip/rcc:     Update helper to match with clock description defined in DFP
+
+    ### Drivers updates
+
+      * ip/generic: Add HAL_CHECK_UPDATE_STATE macro to hal_def.h:
+
+      * ip/rcc: Regular merge from u5/master
+
+      * ip/*: M-1: Rework assert file and make it usable
+
+      * ip/*: rename assert_param to ASSERT_DBG_PARAM
+
+      * ip/usb: Realign the generic code to move to hal_status_t
+    </release>
+    <release version="2.0.0-alpha.0.9" date="2022-07-26">
+      - CodeSpell, MISRA and MCU Astyle fixes
+      - Change HAL_StatusTypeDef to hal_status_t  + assert_dbg_param to ASSERT_DBG_PARAM
+      - Few alignment on JSON grammar v2.0.0
+    </release>
+    <release version="2.0.0-alpha.0.8" date="2022-06-17">Add System and update GPIO init components </release>
+    <release version="2.0.0-alpha.0.7" date="2022-05-30">Miss gpio parameters and helpers files in driver</release>
+    <release version="2.0.0-alpha.0.6" date="2022-05-24">Add template for GPIO</release>
+    <release version="2.0.0-alpha.0.5" date="2022-04-28">Fix few issues in parameters not aligned with JSON grammar 1.0.0</release>
+    <release version="0.1.3" date="2022-04-06">Remove Legacy folder</release>
+    <release version="0.1.2" date="2022-04-01">Update</release>
+    <release version="0.1.1" date="2022-03-17">Add component for TIMER code generation</release>
+  </releases>
+
+  <keywords>
+    <keyword>ST</keyword>
+    <keyword>HAL</keyword>
+    <keyword>LL</keyword>
+    <keyword>STM32U5</keyword>
+    <keyword>STM32U5xx</keyword>
+  </keywords>
+
+  <requirements>
+    <packages>
+      <package vendor="STMicroelectronics" name="stm32u5xx_dfp" version="0.1.1" />
+      <package vendor="ARM" name="CMSIS" version="5.6.0" />
+    </packages>
+  </requirements>
+
+  <conditions>
+    <condition id="U5_GFX">
+      <description>STMicroelectronics STM32U5</description>
+      <accept Dvendor="STMicroelectronics:13" Dname="STM32U599*" />
+      <accept Dvendor="STMicroelectronics:13" Dname="STM32U5A9*" />
+      <accept Dvendor="STMicroelectronics:13" Dname="STM32U5F9*" />
+      <accept Dvendor="STMicroelectronics:13" Dname="STM32U5G9*" />
+    </condition>
+
+    <condition id="U5_4M">
+      <description>STMicroelectronics STM32U5</description>
+      <accept Dvendor="STMicroelectronics:13" Dname="STM32U595*" />
+      <accept Dvendor="STMicroelectronics:13" Dname="STM32U599*" />
+      <accept Dvendor="STMicroelectronics:13" Dname="STM32U5A5*" />
+      <accept Dvendor="STMicroelectronics:13" Dname="STM32U5A9*" />
+      <accept Dvendor="STMicroelectronics:13" Dname="STM32U5F9*" />
+      <accept Dvendor="STMicroelectronics:13" Dname="STM32U5G9*" />
+    </condition>
+
+    <condition id="STM32U5">
+      <description>STMicroelectronics STM32U5</description>
+      <require Dvendor="STMicroelectronics:13" Dname="STM32U5*" />
+    </condition>
+
+    <!-- HAL Conditions -->
+    <condition id="CMSIS Core">
+      <description>STMicroelectronics STM32U5 and HAL Common</description>
+      <require condition="STM32U5" />
+      <require Cclass="CMSIS" Cgroup="CORE" />
+      <require Cclass="Device" Cgroup="STM32 HAL" Csub="Cortex" />
+    </condition>
+
+    <condition id="HAL Common 4M">
+      <description>STMicroelectronics STM32U5 and HAL</description>
+      <require condition="U5_4M" />
+      <require Cclass="Device" Cgroup="STM32 HAL" Csub="Common" />
+    </condition>
+
+    <condition id="HAL Common GFX">
+      <description>STMicroelectronics STM32U5 and HAL</description>
+      <require condition="U5_GFX" />
+      <require Cclass="Device" Cgroup="STM32 HAL" Csub="Common" />
+    </condition>
+
+    <condition id="HAL Common">
+      <description>STMicroelectronics STM32U5 and HAL</description>
+      <require condition="STM32U5" />
+      <require Cclass="Device" Cgroup="STM32 HAL" Csub="Common" />
+    </condition>
+
+    <condition id="HAL System">
+      <description>STMicroelectronics STM32U5 and HAL</description>
+      <require Cclass="Device" Cgroup="STM32 HAL" Csub="GPIO" />
+      <require Cclass="Device" Cgroup="STM32 HAL" Csub="PWR" />
+      <require Cclass="Device" Cgroup="STM32 HAL" Csub="RCC" />
+      <require condition="STM32U5" />
+    </condition>
+
+    <condition id="HAL System DMA">
+      <description>STMicroelectronics STM32U5 and HAL with DMA</description>
+      <require Cclass="Device" Cgroup="STM32 HAL" Csub="DMA" />
+      <require condition="HAL System" />
+    </condition>
+    <condition id="HAL GPIO">
+      <description>STMicroelectronics STM32U5 and HAL with GPIO</description>
+      <require condition="STM32U5" />
+      <require Cclass="Device" Cgroup="STM32 HAL" Csub="Common" />
+      <require Cclass="Device" Cgroup="STM32 HAL" Csub="GPIO" />
+    </condition>
+
+    <!-- HAL Init Generated Code Conditions -->
+    <condition id="HAL Generated code">
+      <description>STMicroelectronics HAL Common Init</description>
+      <require condition="STM32U5" />
+      <require condition="HAL System"/>
+      <require Cclass="Device" Cgroup="STM32 HAL Code Gen" Csub="Generated Code" />
+    </condition>
+    <condition id="HAL System Init">
+      <description>STMicroelectronics HAL Common Init</description>
+      <require condition="HAL Generated code"/>
+      <require Cclass="Device" Cgroup="STM32 HAL Code Gen" Csub="System Init"/>
+    </condition>
+    <condition id="HAL System Gpio DMA Init">
+      <description>STMicroelectronics HAL System, GPIO and DMA Init dependencies</description>
+      <require condition="HAL System Init" />
+    </condition>
+    <condition id="HAL System Init and GPIO">
+      <description>STMicroelectronics HAL GPIO Init dependencies</description>
+      <require condition="HAL System Init"/>
+      <require Cclass="Device" Cgroup="STM32 HAL" Csub="GPIO"/>
+    </condition>
+    <condition id="HAL System Init and CRC">
+      <description>STMicroelectronics HAL CRC Init dependencies</description>
+      <require condition="HAL System Init" />
+      <require Cclass="Device" Cgroup="STM32 HAL" Csub="CRC" />
+    </condition>
+    <condition id="HAL System Gpio DMA Init and TIM">
+      <description>STMicroelectronics HAL TIM Init dependencies</description>
+      <require condition="HAL System Gpio DMA Init"/>
+      <require Cclass="Device" Cgroup="STM32 HAL" Csub="TIM"/>
+    </condition>
+    <condition id="HAL System Gpio DMA Init and UART">
+      <description>STMicroelectronics HAL UART Init dependencies</description>
+      <require condition="HAL System Gpio DMA Init" />
+      <require Cclass="Device" Cgroup="STM32 HAL" Csub="UART" />
+    </condition>
+
+
+    <!-- LL driver Conditions -->
+    <condition id="LL">
+      <description>STMicroelectronics STM32U5 and LL</description>
+      <require condition="STM32U5" />
+      <require Cclass="Device" Cgroup="STM32 LL" Csub="Common" />
+    </condition>
+    <condition id="LL Common">
+      <description>STMicroelectronics STM32U5 and LL</description>
+      <require condition="STM32U5" />
+      <require Cclass="CMSIS" Cgroup="CORE" />
+      <require Cclass="Device" Cgroup="STM32 LL" Csub="UTILS" />
+      <require Cclass="Device" Cgroup="STM32 LL" Csub="RCC" />
+      <require Cclass="Device" Cgroup="STM32 LL" Csub="PWR" />
+    </condition>
+    <!-- LL Init Generated Code Conditions -->
+    <!-- <condition id="LL System Init">
+      <description>STMicroelectronics LL Common Init</description>
+      <require Cclass="Device" Cgroup="STM32 LL Code Gen" Csub="System Init"/>
+      <require Cclass="Device" Cgroup="STM32 LL Code Gen" Csub="Generated Code"/>
+    </condition>
+    <condition id="LL System Init and ADC">
+      <description>STMicroelectronics LL ADC Init dependencies</description>
+      <require condition="LL System Init"/>
+      <require Cclass="Device" Cgroup="STM32 LL" Csub="ADC"/>
+    </condition> -->
+
+    <!-- HAL OS Conditions -->
+    <condition id="NO OS">
+      <description>NO MW used for HAL OS</description>
+      <require condition="STM32U5" />
+    </condition>
+    <condition id="MW FreeRTOS">
+      <description>MW FreeRTOS used for HAL OS</description>
+      <require condition="STM32U5" />
+    </condition>
+    <condition id="MW AZURE">
+      <description>MW AZURE used for HAL OS</description>
+      <require condition="STM32U5" />
+    </condition>
+    <condition id="CMSIS OS">
+      <description>CMSIS OS used for HAL OS</description>
+      <require condition="STM32U5" />
+    </condition>
+    <condition id="TEMPLATE OS">
+      <description>TEMPLATE OS used for HAL OS</description>
+      <require condition="STM32U5" />
+    </condition>
+
+  </conditions>
+
+  <generators>
+    <!-- This generator is launched if any component referencing this generator by 'id' is selected and the specified <gpdsc> file does not exist -->
+    <generator id="STM32Cube_CodeGen">
+      <description>ST Microelectronics: STM32 Cube Code Generator for HAL Drivers Pack</description>
+      <exe>
+        <command host="win">.config/gen_code.bat</command>
+        <command host="linux">.config/gen_code.sh</command>
+        <!-- $S = Device Family Pack base folder -->
+        <argument>$S</argument>
+        <!-- D = Device (Dname/Dvariant as configured by environment) -->
+        <argument>$D</argument>
+        <!-- Project path and project name (as configured by environment) -->
+        <argument>$P</argument>
+        <argument>#P</argument>
+        <!-- #name of the gpdsc template contained in this PACK and aligned with GPDSC name-->
+        <argument>HAL_Driver_codegen_template.gpdsc.hbs</argument>
+        <!-- passing the generator name-->
+        <argument>STM32Cube_CodeGen</argument>
+        <argument>$G</argument>
+      </exe>
+      <!-- workingDir></workingDir -->
+      <!-- path is specified either absolute or relative to PDSC or GPDSC file. If not specified it is the project directory configured by the environment -->
+      <gpdsc name="$P/STM32_HAL_Driver_codegen.gpdsc" />
+    </generator>
+    <!-- <generator id="STM32Cube_LL_CodeGen">
+      <description>ST Microelectronics: STM32 Cube LL Code Generator</description>
+      <exe>
+        <command host = "win">.config\gen_code.bat</command> -->
+    <!-- $S = Device Family Pack base folder -->
+    <!-- <argument>$S</argument> -->
+    <!-- D = Device (Dname/Dvariant as configured by environment) -->
+    <!-- <argument>$D</argument> -->
+    <!-- Project path and project name (as configured by environment) -->
+    <!-- <argument>$P</argument>
+        <argument>#P</argument> -->
+    <!-- #name of the gpdsc template contained in this PACK and aligned with GPDSC name-->
+    <!-- <argument>LL_Driver_codegen_template.gpdsc</argument>
+      </exe> -->
+    <!-- workingDir></workingDir -->
+    <!-- path is specified either absolute or relative to PDSC or GPDSC file. If not specified it is the project directory configured by the environment -->
+    <!-- <gpdsc name="$P/LL_Driver_codegen.gpdsc"/>
+    </generator> -->
+  </generators>
+
+  <components>
+    <!-- START: STMicroelectronics STM32CubeU5 HAL -->
+    <component Cclass="Device" Cgroup="STM32 HAL" Csub="Common" Cversion="0.1.0" condition="CMSIS Core">
+      <description>Common HAL driver</description>
+      <files>
+        <file category="include" name="Inc/" />
+        <file category="header" name="Inc/stm32u5xx_hal.h" />
+        <file category="source" name="Src/stm32u5xx_hal.c" />
+      </files>
+    </component>
+    <component Cclass="Device" Cgroup="STM32 HAL" Csub="template" Cversion="0.1.0" condition="HAL Common">
+      <description>Analog-to-digital converter (ADC) HAL driver</description>
+      <files>
+        <file category="source" name="Src/stm32u5xx_hal_msp_template.c" />
+        <file category="source" name="Src/stm32u5xx_hal_timebase_rtc_alarm_template.c" />
+        <file category="source" name="Src/stm32u5xx_hal_timebase_rtc_wakeup_template.c" />
+        <file category="source" name="Src/stm32u5xx_hal_timebase_tim_template.c" />
+        <file category="doc" name="LICENSE.md" />
+        <file category="doc" name="LICENSE.txt" />
+        <file category="doc" name="README.md" />
+        <file category="doc" name="Release_Notes.html" />
+        <file category="doc" name="_htmresc/st_logo_2020.png" />
+        <file category="doc" name="_htmresc/mini-st_2020.css" />
+      </files>
+    </component>
+    <component Cclass="Device" Cgroup="STM32 HAL" Csub="ADC" Cversion="0.1.0" condition="HAL System DMA">
+      <description>Analog-to-digital converter (ADC) HAL driver</description>
+      <files>
+        <file category="source" name="Src/stm32u5xx_hal_adc.c" />
+        <file category="source" name="Src/stm32u5xx_hal_adc_ex.c" />
+      </files>
+    </component>
+    <component Cclass="Device" Cgroup="STM32 HAL" Csub="COMP" Cversion="0.1.0" condition="HAL Common">
+      <description>Comparator (COMP) HAL driver</description>
+      <files>
+        <file category="source" name="Src/stm32u5xx_hal_comp.c" />
+      </files>
+    </component>
+    <component Cclass="Device" Cgroup="STM32 HAL" Csub="CORDIC" Cversion="0.1.0" condition="HAL System DMA">
+      <description>CORDIC HAL driver</description>
+      <files>
+        <file category="source" name="Src/stm32u5xx_hal_cordic.c" />
+      </files>
+    </component>
+    <component Cclass="Device" Cgroup="STM32 HAL" Csub="Cortex" Cversion="0.1.0" condition="HAL Common">
+      <description>Cortex HAL driver</description>
+      <files>
+        <file category="source" name="Src/stm32u5xx_hal_cortex.c" />
+      </files>
+    </component>
+    <component Cclass="Device" Cgroup="STM32 HAL" Csub="CRC" Cversion="0.1.0" condition="HAL Common">
+      <description>CRC calculation unit (CRC) HAL driver</description>
+      <files>
+        <file category="source" name="Src/stm32u5xx_hal_crc.c" />
+        <file category="source" name="Src/stm32u5xx_hal_crc_ex.c" />
+      </files>
+    </component>
+    <component Cclass="Device" Cgroup="STM32 HAL" Csub="CRYP" Cversion="0.1.0" condition="HAL System DMA">
+      <description>Cryptographic processor (CRYP) HAL driver</description>
+      <files>
+        <file category="source" name="Src/stm32u5xx_hal_cryp.c" />
+        <file category="source" name="Src/stm32u5xx_hal_cryp_ex.c" />
+      </files>
+    </component>
+    <component Cclass="Device" Cgroup="STM32 HAL" Csub="DAC" Cversion="0.1.0" condition="HAL System DMA">
+      <description>Digital-to-analog converter (DAC) HAL driver</description>
+      <files>
+        <file category="source" name="Src/stm32u5xx_hal_dac.c" />
+        <file category="source" name="Src/stm32u5xx_hal_dac_ex.c" />
+      </files>
+    </component>
+    <component Cclass="Device" Cgroup="STM32 HAL" Csub="DCACHE" Cversion="0.1.0" condition="HAL Common">
+      <description>DCACHE HAL driver</description>
+      <files>
+        <file category="source" name="Src/stm32u5xx_hal_dcache.c" />
+      </files>
+    </component>
+    <component Cclass="Device" Cgroup="STM32 HAL" Csub="DCMI" Cversion="0.1.0" condition="HAL Common">
+      <description>Digital camera interface HAL driver</description>
+      <files>
+        <file category="source" name="Src/stm32u5xx_hal_dcmi.c" />
+      </files>
+    </component>
+    <component Cclass="Device" Cgroup="STM32 HAL" Csub="DMA" Cversion="0.1.0" condition="HAL Common">
+      <description>DMA controller (DMA) HAL driver</description>
+      <files>
+        <file category="source" name="Src/stm32u5xx_hal_dma.c" />
+        <file category="source" name="Src/stm32u5xx_hal_dma_ex.c" />
+      </files>
+    </component>
+    <component Cclass="Device" Cgroup="STM32 HAL" Csub="DMA2D" Cversion="0.1.0" condition="HAL System DMA">
+      <description>DMA2D controller (DMA2D) HAL driver</description>
+      <files>
+        <file category="source" name="Src/stm32u5xx_hal_dma2d.c" />
+      </files>
+    </component>
+    <component Cclass="Device" Cgroup="STM32 HAL" Csub="DSI" Cversion="0.1.0" condition="HAL Common GFX">
+      <description>DCMI HAL driver</description>
+      <files>
+        <file category="source" name="Src/stm32u5xx_hal_dsi.c" />
+      </files>
+    </component>
+    <component Cclass="Device" Cgroup="STM32 HAL" Csub="EXTI" Cversion="0.1.0" condition="HAL Common">
+      <description>External interrupts and events (EXTI) controller</description>
+      <files>
+        <file category="source" name="Src/stm32u5xx_hal_exti.c" />
+      </files>
+    </component>
+    <component Cclass="Device" Cgroup="STM32 HAL" Csub="FDCAN" Cversion="0.1.0" condition="HAL Common">
+      <description>FDCAN HAL Driver</description>
+      <files>
+        <file category="source" name="Src/stm32u5xx_hal_fdcan.c" />
+      </files>
+    </component>
+    <component Cclass="Device" Cgroup="STM32 HAL" Csub="Flash" Cversion="0.1.0" condition="HAL Common">
+      <description>Embedded Flash memory HAL driver</description>
+      <files>
+        <file category="source" name="Src/stm32u5xx_hal_flash.c" />
+        <file category="source" name="Src/stm32u5xx_hal_flash_ex.c" />
+      </files>
+    </component>
+    <component Cclass="Device" Cgroup="STM32 HAL" Csub="FMAC" Cversion="0.1.0" condition="HAL Common">
+      <description>FMAC HAL Driver</description>
+      <files>
+        <file category="source" name="Src/stm32u5xx_hal_fmac.c" />
+      </files>
+    </component>
+    <component Cclass="Device" Cgroup="STM32 HAL" Csub="GFXMMU" Cversion="0.1.0" condition="HAL Common GFX">
+      <description>GFXMMU HAL driver</description>
+      <files>
+        <file category="source" name="Src/stm32u5xx_hal_gfxmmu.c" />
+      </files>
+    </component>
+    <component Cclass="Device" Cgroup="STM32 HAL" Csub="GPU2D" Cversion="0.1.0" condition="HAL Common GFX">
+      <description>LTDC HAL driver</description>
+      <files>
+        <file category="source" name="Src/stm32u5xx_hal_gpu2d.c" />
+      </files>
+    </component>
+    <component Cclass="Device" Cgroup="STM32 HAL" Csub="GPIO" Cversion="0.1.0" condition="HAL Common">
+      <description>General-purpose I/O (GPIO) HAL driver</description>
+      <files>
+        <file category="source" name="Src/stm32u5xx_hal_gpio.c" />
+      </files>
+    </component>
+    <component Cclass="Device" Cgroup="STM32 HAL" Csub="GTZC" Cversion="0.1.0" condition="HAL Common">
+      <description>GTZC HAL driver</description>
+      <files>
+        <file category="source" name="Src/stm32u5xx_hal_gtzc.c" />
+      </files>
+    </component>
+    <component Cclass="Device" Cgroup="STM32 HAL" Csub="HASH" Cversion="0.1.0" condition="HAL System DMA">
+      <description>HASH HAL driver</description>
+      <files>
+        <file category="source" name="Src/stm32u5xx_hal_hash.c" />
+        <file category="source" name="Src/stm32u5xx_hal_hash_ex.c" />
+      </files>
+    </component>
+    <component Cclass="Device" Cgroup="STM32 HAL" Csub="HCD" Cversion="0.1.0" condition="HAL System DMA">
+      <description>HCD HAL driver</description>
+      <files>
+        <file category="source" name="Src/stm32u5xx_hal_hcd.c" />
+      </files>
+    </component>
+    <component Cclass="Device" Cgroup="STM32 HAL" Csub="I2C" Cversion="0.1.0" condition="HAL System DMA">
+      <description>Inter-integrated circuit (I2C) interface HAL driver</description>
+      <files>
+        <file category="source" name="Src/stm32u5xx_hal_i2c.c" />
+        <file category="source" name="Src/stm32u5xx_hal_i2c_ex.c" />
+      </files>
+    </component>
+    <component Cclass="Device" Cgroup="STM32 HAL" Csub="ICACHE" Cversion="0.1.0" condition="HAL System DMA">
+      <description>ICACHE HAL driver</description>
+      <files>
+        <file category="source" name="Src/stm32u5xx_hal_icache.c" />
+      </files>
+    </component>
+    <component Cclass="Device" Cgroup="STM32 HAL" Csub="IRDA" Cversion="0.1.0" condition="HAL System DMA">
+      <description>IrDA HAL driver</description>
+      <files>
+        <file category="source" name="Src/stm32u5xx_hal_irda.c" />
+      </files>
+    </component>
+    <component Cclass="Device" Cgroup="STM32 HAL" Csub="IWDG" Cversion="0.1.0" condition="HAL Common">
+      <description>Independent watchdog (IWDG) HAL driver</description>
+      <files>
+        <file category="source" name="Src/stm32u5xx_hal_iwdg.c" />
+      </files>
+    </component>
+    <component Cclass="Device" Cgroup="STM32 HAL" Csub="LPTIM" Cversion="0.1.0" condition="HAL Common">
+      <description>Low-power timer (LPTIM) HAL driver</description>
+      <files>
+        <file category="source" name="Src/stm32u5xx_hal_lptim.c" />
+      </files>
+    </component>
+    <component Cclass="Device" Cgroup="STM32 HAL" Csub="LTDC" Cversion="0.1.0" condition="HAL Common GFX">
+      <description>LTDC HAL driver</description>
+      <files>
+        <file category="source" name="Src/stm32u5xx_hal_ltdc.c" />
+        <file category="source" name="Src/stm32u5xx_hal_ltdc_ex.c" />
+      </files>
+    </component>
+    <component Cclass="Device" Cgroup="STM32 HAL" Csub="MDF" Cversion="0.1.0" condition="HAL Common">
+      <description>MDF HAL driver</description>
+      <files>
+        <file category="source" name="Src/stm32u5xx_hal_mdf.c" />
+      </files>
+    </component>
+    <component Cclass="Device" Cgroup="STM32 HAL" Csub="MMC" Cversion="0.1.0" condition="HAL Common">
+      <description>MMC HAL driver</description>
+      <files>
+        <file category="source" name="Src/stm32u5xx_hal_mmc.c" />
+        <file category="source" name="Src/stm32u5xx_hal_mmc_ex.c" />
+      </files>
+    </component>
+    <component Cclass="Device" Cgroup="STM32 HAL" Csub="NAND" Cversion="0.1.0" condition="HAL Common">
+      <description>NAND Flash controller HAL driver</description>
+      <files>
+        <file category="source" name="Src/stm32u5xx_hal_nand.c" />
+        <file category="source" name="Src/stm32u5xx_ll_fmc.c" />
+      </files>
+    </component>
+    <component Cclass="Device" Cgroup="STM32 HAL" Csub="NOR" Cversion="0.1.0" condition="HAL Common">
+      <description>NOR Flash controller HAL driver</description>
+      <files>
+        <file category="source" name="Src/stm32u5xx_hal_nor.c" />
+        <file category="source" name="Src/stm32u5xx_ll_fmc.c" />
+      </files>
+    </component>
+    <component Cclass="Device" Cgroup="STM32 HAL" Csub="OPAMP" Cversion="0.1.0" condition="HAL Common">
+      <description>OPAMP HAL driver</description>
+      <files>
+        <file category="source" name="Src/stm32u5xx_hal_opamp.c" />
+        <file category="source" name="Src/stm32u5xx_hal_opamp_ex.c" />
+      </files>
+    </component>
+    <component Cclass="Device" Cgroup="STM32 HAL" Csub="OSPI" Cversion="0.1.0" condition="HAL Common">
+      <description>OPAMP HAL driver</description>
+      <files>
+        <file category="source" name="Src/stm32u5xx_hal_ospi.c" />
+      </files>
+    </component>
+    <component Cclass="Device" Cgroup="STM32 HAL" Csub="OTFDEC" Cversion="0.1.0" condition="HAL Common">
+      <description>OTFDEC HAL driver</description>
+      <files>
+        <file category="source" name="Src/stm32u5xx_hal_otfdec.c" />
+      </files>
+    </component>
+    <component Cclass="Device" Cgroup="STM32 HAL" Csub="PCD" Cversion="0.1.0" condition="HAL Common">
+      <description>USB Peripheral controller (PCD) HAL driver</description>
+      <files>
+        <file category="source" name="Src/stm32u5xx_hal_pcd.c" />
+        <file category="source" name="Src/stm32u5xx_hal_pcd_ex.c" />
+        <file category="source" name="Src/stm32u5xx_ll_usb.c" />
+      </files>
+    </component>
+    <component Cclass="Device" Cgroup="STM32 HAL" Csub="PKA" Cversion="0.1.0" condition="HAL Common">
+      <description>PKA HAL driver</description>
+      <files>
+        <file category="source" name="Src/stm32u5xx_hal_pka.c" />
+      </files>
+    </component>
+    <component Cclass="Device" Cgroup="STM32 HAL" Csub="PSSI" Cversion="0.1.0" condition="HAL Common">
+      <description>PSSI HAL driver</description>
+      <files>
+        <file category="source" name="Src/stm32u5xx_hal_pssi.c" />
+      </files>
+    </component>
+    <component Cclass="Device" Cgroup="STM32 HAL" Csub="PWR" Cversion="0.1.0" condition="HAL Common">
+      <description>Power controller (PWR) HAL driver</description>
+      <files>
+        <file category="source" name="Src/stm32u5xx_hal_pwr.c" />
+        <file category="source" name="Src/stm32u5xx_hal_pwr_ex.c" />
+      </files>
+    </component>
+    <component Cclass="Device" Cgroup="STM32 HAL" Csub="RAMCFG" Cversion="0.1.0" condition="HAL System DMA">
+      <description>RAMCFG HAL driver</description>
+      <files>
+        <file category="source" name="Src/stm32u5xx_hal_ramcfg.c" />
+      </files>
+    </component>
+    <component Cclass="Device" Cgroup="STM32 HAL" Csub="RCC" Cversion="0.1.0" condition="HAL GPIO">
+      <description>Reset and clock control (RCC) HAL driver</description>
+      <files>
+        <file category="source" name="Src/stm32u5xx_hal_rcc.c" />
+        <file category="source" name="Src/stm32u5xx_hal_rcc_ex.c" />
+      </files>
+    </component>
+    <component Cclass="Device" Cgroup="STM32 HAL" Csub="RNG" Cversion="0.1.0" condition="HAL Common">
+      <description>Random number generator (RNG) HAL driver</description>
+      <files>
+        <file category="source" name="Src/stm32u5xx_hal_rng.c" />
+        <file category="source" name="Src/stm32u5xx_hal_rng_ex.c" />
+      </files>
+    </component>
+    <component Cclass="Device" Cgroup="STM32 HAL" Csub="RTC" Cversion="0.1.0" condition="HAL Common">
+      <description>Real-time clock (RTC) HAL driver</description>
+      <files>
+        <file category="source" name="Src/stm32u5xx_hal_rtc.c" />
+        <file category="source" name="Src/stm32u5xx_hal_rtc_ex.c" />
+      </files>
+    </component>
+    <component Cclass="Device" Cgroup="STM32 HAL" Csub="SAI" Cversion="0.1.0" condition="HAL System DMA">
+      <description>Serial audio interface (SAI) HAL driver</description>
+      <files>
+        <file category="source" name="Src/stm32u5xx_hal_sai.c" />
+        <file category="source" name="Src/stm32u5xx_hal_sai_ex.c" />
+      </files>
+    </component>
+    <component Cclass="Device" Cgroup="STM32 HAL" Csub="SD" Cversion="0.1.0" condition="HAL System DMA">
+      <description>SD HAL driver</description>
+      <files>
+        <file category="source" name="Src/stm32u5xx_hal_sd.c" />
+        <file category="source" name="Src/stm32u5xx_hal_sd_ex.c" />
+      </files>
+    </component>
+    <component Cclass="Device" Cgroup="STM32 HAL" Csub="Smartcard" Cversion="0.1.0" condition="HAL System DMA">
+      <description>Smartcard HAL driver</description>
+      <files>
+        <file category="source" name="Src/stm32u5xx_hal_smartcard.c" />
+        <file category="source" name="Src/stm32u5xx_hal_smartcard_ex.c" />
+      </files>
+    </component>
+    <component Cclass="Device" Cgroup="STM32 HAL" Csub="SMBUS" Cversion="0.1.0" condition="HAL System DMA">
+      <description>SMBus (SMBUS) interface HAL driver</description>
+      <files>
+        <file category="source" name="Src/stm32u5xx_hal_smbus.c" />
+        <file category="source" name="Src/stm32u5xx_hal_smbus_ex.c" />
+      </files>
+    </component>
+    <component Cclass="Device" Cgroup="STM32 HAL" Csub="SPI" Cversion="0.1.0" condition="HAL System DMA">
+      <description>Serial peripheral interface (SPI) HAL driver</description>
+      <files>
+        <file category="source" name="Src/stm32u5xx_hal_spi.c" />
+        <file category="source" name="Src/stm32u5xx_hal_spi_ex.c" />
+      </files>
+    </component>
+    <component Cclass="Device" Cgroup="STM32 HAL" Csub="SRAM" Cversion="0.1.0" condition="HAL System DMA">
+      <description>SRAM controller (SRAM) HAL driver</description>
+      <files>
+        <file category="source" name="Src/stm32u5xx_hal_sram.c" />
+        <file category="source" name="Src/stm32u5xx_ll_fmc.c" />
+      </files>
+    </component>
+    <component Cclass="Device" Cgroup="STM32 HAL" Csub="TIM" Cversion="0.1.0" condition="HAL System DMA">
+      <description>Timers (TIM) HAL driver</description>
+      <files>
+        <file category="source" name="Src/stm32u5xx_hal_tim.c" />
+        <file category="source" name="Src/stm32u5xx_hal_tim_ex.c" />
+      </files>
+    </component>
+    <component Cclass="Device" Cgroup="STM32 HAL" Csub="TSC" Cversion="0.1.0" condition="HAL System DMA">
+      <description>Touch Sensing Controller (TSC) HAL driver</description>
+      <files>
+        <file category="source" name="Src/stm32u5xx_hal_tsc.c" />
+      </files>
+    </component>
+    <component Cclass="Device" Cgroup="STM32 HAL" Csub="UART" Cversion="0.1.0" condition="HAL System DMA">
+      <description>Universal asynchronous receiver transmitter (UART) HAL driver</description>
+      <files>
+        <file category="source" name="Src/stm32u5xx_hal_uart.c" />
+        <file category="source" name="Src/stm32u5xx_hal_uart_ex.c" />
+      </files>
+    </component>
+    <component Cclass="Device" Cgroup="STM32 HAL" Csub="USART" Cversion="0.1.0" condition="HAL System DMA">
+      <description>Universal synchronous asynchronous receiver transmitter (USART) HAL driver</description>
+      <files>
+        <file category="source" name="Src/stm32u5xx_hal_usart.c" />
+        <file category="source" name="Src/stm32u5xx_hal_usart_ex.c" />
+      </files>
+    </component>
+    <component Cclass="Device" Cgroup="STM32 HAL" Csub="WWDG" Cversion="0.1.0" condition="HAL Common">
+      <description>Window watchdog (WWDG) HAL driver</description>
+      <files>
+        <file category="source" name="Src/stm32u5xx_hal_wwdg.c" />
+      </files>
+    </component>
+    <component Cclass="Device" Cgroup="STM32 HAL" Csub="WWDG" Cversion="0.1.0" condition="HAL Common 4M">
+      <description>Window watchdog (WWDG) HAL driver</description>
+      <files>
+        <file category="source" name="Src/stm32u5xx_hal_xspi.c" />
+      </files>
+    </component>
+    <!-- END: STMicroelectronics STM32CubeU5 HAL -->
+
+    <!-- START: STMicroelectronics STM32CubeU5 HAL CODE GEN -->
+    <component generator="STM32Cube_CodeGen" Cclass="Device" Cgroup="STM32 HAL Code Gen" Csub="Generated Code" Cversion="0.1.0" condition="HAL Common">
+      <description>Temporary component that will store all the resulting generated code</description>
+      <files>
+        <file category="other" name=".config/gen_code.bat" />
+        <file category="other" name=".config/gen_code.sh" />
+        <file category="other" name=".config/HAL_Driver_codegen_template.gpdsc.hbs" />
+      </files>
+    </component>
+    <component generator="STM32Cube_CodeGen" Cclass="Device" Cgroup="STM32 HAL Code Gen" Csub="System Init"       Cversion="0.1.0" condition="HAL Generated code" >
+      <description>Code Generation for common System files</description>
+      <files>
+        <file category="other" name=".config/template/common/stm32_assert_template.h.hbs"/>
+        <file category="other" name=".config/template/common/stm32u5xx_hal_conf_template.h.hbs"/>
+        <file category="other" name=".config/template/common/stm32_system_template.c.hbs"/>
+        <file category="other" name=".config/template/common/stm32_system_template.h.hbs"/>
+        <file category="other" name=".config/template/common/stm32_target_template.h.hbs"/>
+        <file category="other" name=".config/stm32u5xx_hal_system_parameters.json"/>
+        <file category="other" name=".config/template/partials/RCC_partial.hbs" />
+        <file category="other" name=".config/template/partials/GPIO_partial.hbs" />
+        <file category="other" name=".config/template/partials/EXTI_partial.hbs" />
+        <file category="other" name=".config/template/partials/TIM_partial.hbs" />
+        <file category="other" name=".config/exti_configuration.json" />
+        <file category="other" name=".config/template/helpers/common_helpers.js" />
+        <file category="other" name=".config/template/helpers/rcc_helpers.js" />
+        <file category="other" name=".config/template/helpers/exti_helpers.js" />
+      </files>
+    </component>
+    <component generator="STM32Cube_CodeGen" Cclass="Device" Cgroup="STM32 HAL Code Gen" Csub="GPIO Init" Cversion="0.1.0" condition="HAL System Init and GPIO">
+      <description>Init Code Generation for GPIO HAL driver</description>
+      <files>
+        <file category="other" name=".config/template/GPIO/stm32_gpio_template.c.hbs" />
+        <file category="other" name=".config/template/GPIO/stm32_gpio_template.h.hbs" />
+        <file category="other" name=".config/template/partials/EXTI_partial.hbs" />
+        <file category="other" name=".config/template/helpers/exti_helpers.js" />
+        <file category="other" name=".config/template/helpers/gpio_helpers.js" />
+        <file category="other" name=".config/stm32u5xx_hal_gpio_parameters.json" />
+        <file category="other" name=".config/gpio_configuration.json" />
+        <file category="other" name=".config/exti_configuration.json" />
+      </files>
+    </component>
+    <component generator="STM32Cube_CodeGen" Cclass="Device" Cgroup="STM32 HAL Code Gen" Csub="CRC Init" Cversion="0.1.0" condition="HAL System Init and CRC">
+      <description>Init Code Generation for CRC HAL driver</description>
+      <files>
+        <file category="other" name=".config/template/CRC/stm32_crc_template.c.hbs" />
+        <file category="other" name=".config/template/CRC/stm32_crc_template.h.hbs" />
+        <file category="other" name=".config/stm32u5xx_hal_crc_parameters.json" />
+        <file category="other" name=".config/template/hooks/mapping_hook.js" />
+      </files>
+    </component>
+    <component generator="STM32Cube_CodeGen" Cclass="Device" Cgroup="STM32 HAL Code Gen" Csub="TIM Init" Cversion="0.1.0" condition="HAL System Gpio DMA Init and TIM">
+      <description>Init Code Generation for TIM PWM HAL driver</description>
+      <files>
+        <file category="other" name=".config/template/TIM/stm32_tim_template.c.hbs" />
+        <file category="other" name=".config/template/TIM/stm32_tim_template.h.hbs" />
+        <file category="other" name=".config/stm32u5xx_hal_tim_parameters.json" />
+        <file category="other" name=".config/template/partials/GPIO_partial.hbs" />
+        <file category="other" name=".config/template/helpers/gpio_helpers.js" />
+        <file category="other" name=".config/template/hooks/mapping_hook.js" />
+      </files>
+    </component>
+    <component generator="STM32Cube_CodeGen" Cclass="Device" Cgroup="STM32 HAL Code Gen" Csub="UART Init" Cversion="0.1.0" condition="HAL System Gpio DMA Init and UART"  maxInstances="3">
+      <description>Init Code Generation for UART HAL driver</description>
+      <files>
+        <file category="other" name=".config/template/UART/stm32_uart_template.c.hbs" />
+        <file category="other" name=".config/template/UART/stm32_uart_template.h.hbs" />
+        <file category="other" name=".config/stm32u5xx_hal_uart_parameters.json" />
+        <file category="other" name=".config/template/partials/GPIO_partial.hbs" />
+        <file category="other" name=".config/template/helpers/gpio_helpers.js" />
+        <file category="other" name=".config/template/helpers/rcc_helpers.js" />
+        <file category="other" name=".config/template/hooks/mapping_hook.js" />
+      </files>
+    </component>
+    <!-- END: STMicroelectronics STM32CubeU5 HAL CODE GEN -->
+
+    <!-- START: STMicroelectronics STM32CubeU5 LL -->
+    <component Cclass="Device" Cgroup="STM32 LL" Csub="Common" Cversion="0.1.0" condition="LL Common">
+      <description>Common LL driver</description>
+      <files>
+        <file category="include" name="Inc/" />
+      </files>
+    </component>
+    <component Cclass="Device" Cgroup="STM32 LL" Csub="ADC" Cversion="0.1.0" condition="LL">
+      <description>Analog-to-digital converter (ADC) LL driver</description>
+      <files>
+        <file category="source" name="Src/stm32u5xx_ll_adc.c" />
+      </files>
+    </component>
+    <component Cclass="Device" Cgroup="STM32 LL" Csub="COMP" Cversion="0.1.0" condition="LL">
+      <description>COMP LL driver</description>
+      <files>
+        <file category="source" name="Src/stm32u5xx_ll_comp.c" />
+      </files>
+    </component>
+    <component Cclass="Device" Cgroup="STM32 LL" Csub="CORDIC" Cversion="0.1.0" condition="LL">
+      <description>CORDIC LL driver</description>
+      <files>
+        <file category="source" name="Src/stm32u5xx_ll_cordic.c" />
+      </files>
+    </component>
+    <component Cclass="Device" Cgroup="STM32 LL" Csub="CRC" Cversion="0.1.0" condition="LL">
+      <description>CRC calculation unit (CRC) LL driver</description>
+      <files>
+        <file category="source" name="Src/stm32u5xx_ll_crc.c" />
+      </files>
+    </component>
+    <component Cclass="Device" Cgroup="STM32 LL" Csub="CRS" Cversion="0.1.0" condition="LL">
+      <description>(CRS) LL driver</description>
+      <files>
+        <file category="source" name="Src/stm32u5xx_ll_crs.c" />
+      </files>
+    </component>
+    <component Cclass="Device" Cgroup="STM32 LL" Csub="DAC" Cversion="0.1.0" condition="LL">
+      <description>Digital-to-analog converter (DAC) LL driver</description>
+      <files>
+        <file category="source" name="Src/stm32u5xx_ll_dac.c" />
+      </files>
+    </component>
+    <component Cclass="Device" Cgroup="STM32 LL" Csub="DLYB" Cversion="0.1.0" condition="LL">
+      <description>Delay block (DLYB) LL driver</description>
+      <files>
+        <file category="source" name="Src/stm32u5xx_ll_dlyb.c" />
+      </files>
+    </component>
+    <component Cclass="Device" Cgroup="STM32 LL" Csub="DMA" Cversion="0.1.0" condition="LL">
+      <description>DMA controller (DMA) LL driver</description>
+      <files>
+        <file category="source" name="Src/stm32u5xx_ll_dma.c" />
+      </files>
+    </component>
+    <component Cclass="Device" Cgroup="STM32 LL" Csub="DMA2D" Cversion="0.1.0" condition="LL">
+      <description>DMA2D LL driver</description>
+      <files>
+        <file category="source" name="Src/stm32u5xx_ll_dma2d.c" />
+      </files>
+    </component>
+    <component Cclass="Device" Cgroup="STM32 LL" Csub="EXTI" Cversion="0.1.0" condition="LL">
+      <description>Extended interrupts and events controller (EXTI) LL driver</description>
+      <files>
+        <file category="source" name="Src/stm32u5xx_ll_exti.c" />
+      </files>
+    </component>
+    <component Cclass="Device" Cgroup="STM32 LL" Csub="FMAC" Cversion="0.1.0" condition="LL">
+      <description> (FMAC) LL driver</description>
+      <files>
+        <file category="source" name="Src/stm32u5xx_ll_fmac.c" />
+      </files>
+    </component>
+    <component Cclass="Device" Cgroup="STM32 LL" Csub="FMC" Cversion="0.1.0" condition="LL">
+      <description> (FMC) LL driver</description>
+      <files>
+        <file category="source" name="Src/stm32u5xx_ll_fmc.c" />
+      </files>
+    </component>
+    <component Cclass="Device" Cgroup="STM32 LL" Csub="GPIO" Cversion="0.1.0" condition="LL">
+      <description>General-purpose I/O (GPIO) LL driver</description>
+      <files>
+        <file category="source" name="Src/stm32u5xx_ll_gpio.c" />
+      </files>
+    </component>
+    <component Cclass="Device" Cgroup="STM32 LL" Csub="I2C" Cversion="0.1.0" condition="LL">
+      <description>Inter-integrated circuit (I2C) interface LL driver</description>
+      <files>
+        <file category="source" name="Src/stm32u5xx_ll_i2c.c" />
+      </files>
+    </component>
+    <component Cclass="Device" Cgroup="STM32 LL" Csub="ICACHE" Cversion="0.1.0" condition="LL">
+      <description>ICACHE interface LL driver</description>
+      <files>
+        <file category="source" name="Src/stm32u5xx_ll_icache.c" />
+      </files>
+    </component>
+    <component Cclass="Device" Cgroup="STM32 LL" Csub="LPGPIO" Cversion="0.1.0" condition="LL">
+      <description>LPGPIO interface LL driver</description>
+      <files>
+        <file category="source" name="Src/stm32u5xx_ll_lpgpio.c" />
+      </files>
+    </component>
+    <component Cclass="Device" Cgroup="STM32 LL" Csub="LPTIM" Cversion="0.1.0" condition="LL">
+      <description>Low-power timer (LPTIM) interface LL driver</description>
+      <files>
+        <file category="source" name="Src/stm32u5xx_ll_lptim.c" />
+      </files>
+    </component>
+    <component Cclass="Device" Cgroup="STM32 LL" Csub="LPUART" Cversion="0.1.0" condition="LL">
+      <description>Low-power universal asynchronous receiver transmitter (LPUART) LL driver</description>
+      <files>
+        <file category="source" name="Src/stm32u5xx_ll_lpuart.c" />
+      </files>
+    </component>
+    <component Cclass="Device" Cgroup="STM32 LL" Csub="OPAMP" Cversion="0.1.0" condition="LL">
+      <description>(OPAMP) LL driver</description>
+      <files>
+        <file category="source" name="Src/stm32u5xx_ll_opamp.c" />
+      </files>
+    </component>
+    <component Cclass="Device" Cgroup="STM32 LL" Csub="PKA" Cversion="0.1.0" condition="LL">
+      <description>PKA LL driver</description>
+      <files>
+        <file category="source" name="Src/stm32u5xx_ll_pka.c" />
+      </files>
+    </component>
+    <component Cclass="Device" Cgroup="STM32 LL" Csub="PWR" Cversion="0.1.0" condition="LL">
+      <description>Power controller (PWR) LL driver</description>
+      <files>
+        <file category="source" name="Src/stm32u5xx_ll_pwr.c" />
+      </files>
+    </component>
+    <component Cclass="Device" Cgroup="STM32 LL" Csub="RCC" Cversion="0.1.0" condition="LL">
+      <description>Reset and clock control (RCC) LL driver</description>
+      <files>
+        <file category="source" name="Src/stm32u5xx_ll_rcc.c" />
+      </files>
+    </component>
+    <component Cclass="Device" Cgroup="STM32 LL" Csub="RNG" Cversion="0.1.0" condition="LL">
+      <description>Random number generator (RNG) LL driver</description>
+      <files>
+        <file category="source" name="Src/stm32u5xx_ll_rng.c" />
+      </files>
+    </component>
+    <component Cclass="Device" Cgroup="STM32 LL" Csub="RTC" Cversion="0.1.0" condition="LL">
+      <description>Real-time clock (RTC) LL driver</description>
+      <files>
+        <file category="source" name="Src/stm32u5xx_ll_rtc.c" />
+      </files>
+    </component>
+    <component Cclass="Device" Cgroup="STM32 LL" Csub="SDMMC" Cversion="0.1.0" condition="LL">
+      <description>SDMMC LL driver</description>
+      <files>
+        <file category="source" name="Src/stm32u5xx_ll_sdmmc.c" />
+      </files>
+    </component>
+    <component Cclass="Device" Cgroup="STM32 LL" Csub="SPI" Cversion="0.1.0" condition="LL">
+      <description>Serial peripheral interface (SPI) LL driver</description>
+      <files>
+        <file category="source" name="Src/stm32u5xx_ll_spi.c" />
+      </files>
+    </component>
+    <component Cclass="Device" Cgroup="STM32 LL" Csub="TIM" Cversion="0.1.0" condition="LL">
+      <description>Timers (TIM) LL driver</description>
+      <files>
+        <file category="source" name="Src/stm32u5xx_ll_tim.c" />
+      </files>
+    </component>
+    <component Cclass="Device" Cgroup="STM32 LL" Csub="UCPD" Cversion="0.1.0" condition="LL">
+      <description>USB Type-C / USB Power Delivery interface (UCPD) LL driver</description>
+      <files>
+        <file category="source" name="Src/stm32u5xx_ll_ucpd.c" />
+      </files>
+    </component>
+    <component Cclass="Device" Cgroup="STM32 LL" Csub="USART" Cversion="0.1.0" condition="LL">
+      <description>Universal synchronous asynchronous receiver transmitter (USART) LL driver</description>
+      <files>
+        <file category="source" name="Src/stm32u5xx_ll_usart.c" />
+      </files>
+    </component>
+    <component Cclass="Device" Cgroup="STM32 LL" Csub="USB" Cversion="0.1.0" condition="LL">
+      <description>USB (USB) LL driver</description>
+      <files>
+        <file category="source" name="Src/stm32u5xx_ll_usb.c" />
+      </files>
+    </component>
+    <component Cclass="Device" Cgroup="STM32 LL" Csub="UTILS" Cversion="0.1.0" condition="STM32U5">
+      <description>UTILS LL driver</description>
+      <files>
+        <file category="source" name="Src/stm32u5xx_ll_utils.c" />
+      </files>
+    </component>
+    <!-- END: STMicroelectronics STM32CubeU5 LL -->
+    <!-- START: STMicroelectronics STM32CubeU5 LL CODE GEN -->
+    <!-- <component generator="STM32Cube_LL_CodeGen" Cclass="Device" Cgroup="STM32 LL Code Gen" Csub="Generated Code"       Cversion="0.1.0" condition="LL Common">
+      <description>Temporary component that will store all the resulting generated code</description>
+      <files>
+      </files>
+    </component> -->
+    <!-- END: STMicroelectronics STM32CubeU5 HAL CODE GEN -->
+
+    <component Cclass="Device" Cgroup="STM32 HAL" Csub="HAL OS" Cvariant="NO_OS" Cversion="0.0.1" condition="NO OS">
+      <description>HAL OS port without OS</description>
+      <files>
+        <!-- <file category="include" name="hal_os_port/no_os/" /> -->
+        <file category="header" name="hal_os_port/no_os/stm32_hal_os.h" />
+        <file category="source" name="hal_os_port/no_os/stm32_hal_os.c" />
+        <file category="source" name="hal_os_port/README.md" />
+      </files>
+    </component>
+    <component Cclass="Device" Cgroup="STM32 HAL" Csub="HAL OS" Cvariant="FreeRTOS" Cversion="0.0.1" condition="MW FreeRTOS">
+      <description>HAL OS port with MW FreeRTOS</description>
+      <files>
+        <file category="include" name="hal_os_port/freertos/" />
+        <file category="header" name="hal_os_port/freertos/stm32_hal_os.h" />
+        <file category="source" name="hal_os_port/freertos/stm32_hal_os.c" />
+      </files>
+    </component>
+    <component Cclass="Device" Cgroup="STM32 HAL" Csub="HAL OS" Cvariant="AZURE" Cversion="0.0.1" condition="MW AZURE">
+      <description>HAL OS port with MW azure</description>
+      <files>
+        <file category="include" name="hal_os_port/azure_os/" />
+        <file category="header" name="hal_os_port/azure_os/stm32_hal_os.h" />
+        <file category="source" name="hal_os_port/azure_os/stm32_hal_os.c" />
+      </files>
+    </component>
+    <component Cclass="Device" Cgroup="STM32 HAL" Csub="HAL OS" Cvariant="CMSIS OS" Cversion="0.0.1" condition="CMSIS OS">
+      <description>HAL OS port with CMSIS OS</description>
+      <files>
+        <file category="include" name="hal_os_port/cmsis_os/" />
+        <file category="header" name="hal_os_port/cmsis_os/stm32_hal_os.h" />
+        <file category="source" name="hal_os_port/cmsis_os/stm32_hal_os.c" />
+      </files>
+    </component>
+    <component Cclass="Device" Cgroup="STM32 HAL" Csub="HAL OS" Cvariant="TEMPLATE OS" Cversion="0.0.1" condition="TEMPLATE OS">
+      <description>HAL OS port with CMSIS OS</description>
+      <files>
+        <file category="include" name="hal_os_port/template/" />
+        <file category="header" name="hal_os_port/template/stm32_hal_os_template.h" />
+        <file category="source" name="hal_os_port/template/stm32_hal_os_template.c" />
+      </files>
+    </component>
+  </components>
+</package>

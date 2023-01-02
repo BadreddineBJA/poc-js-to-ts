@@ -1,0 +1,175 @@
+{{assign 'current_resource' (@root.ContextAPI.getRousources)~}}
+{{log "TARGET template current_resource:" @root.current_resource~}}
+{{assign 'global_ctxt' (@root.ContextAPI.getGlobalContext)~}}
+{{log "TARGET template global_ctxt:" @root.global_ctxt~}}
+{{assign 'object_cxt' (helper_common_get_target_context @root.global_ctxt)~}}
+{{log "TARGET template object_cxt:" @root.object_cxt~}}
+/**
+  ******************************************************************************
+  * @file           : stm32_target.h
+  * @brief          : Exporting peripherals initialization
+  *                   Include entry for the target folder to the application.
+  ******************************************************************************
+  * @attention
+  *
+  * <h2><center>&copy; Copyright (c) {{COPYRIGHT}} STMicroelectronics.
+  * All rights reserved.</center></h2>
+  *
+  * This software is licensed under terms that can be found in the LICENSE file
+  * in the root directory of this software component.
+  * If no LICENSE file comes with this software, it is provided AS-IS.
+  *
+  ******************************************************************************
+  */
+/* Define to prevent recursive inclusion -------------------------------------*/
+#ifndef STM32_TARGET_H
+#define STM32_TARGET_H
+
+#ifdef __cplusplus
+extern "C" {
+#endif
+
+#if 0
+/* Includes ------------------------------------------------------------------*/
+#include "stm32_hal.h"
+{{!-- {{#each @root.object_cxt}} --}}
+{{!-- {{#> (helper_common_get_partial this) step='target_include'}} --}}
+{{#each @root.current_resource}}
+{{#if (eq this undefined)}}
+{{else}}
+#include "stm32_{{lowercase this}}.h"
+{{/if}}
+{{/each}}
+{{!-- {{/undefined}} --}}
+{{!-- {{/each}} --}}
+{{#each resource}}
+#include "{{lowercase board}}_res.h"
+{{#each parts}}
+#include "{{lowercase resource}}.h"
+{{/each}}
+{{/each}}
+/* Exported types ------------------------------------------------------------*/
+/* Exported constants --------------------------------------------------------*/
+{{#each @root.object_cxt.component}}
+{{#> (helper_common_get_partial this) step='target_defines' component=this}}
+{{/undefined}}
+{{/each}}
+
+/* Exported macro ------------------------------------------------------------*/
+{{#each @root.object_cxt}}
+{{#each parts}}
+#define {{infos.labels}} &{{lowercase resource}}
+{{/each}}
+{{/each}}
+
+/* ########### Aliases to initialization functions ########### */
+{{#each @root.object_cxt.periphs}}
+/*        {{resource_inst}}: aliases for initialization functions */
+{{#each fct_name_labels}}
+#define {{this}}_init      {{../fct_name}}_init
+{{/each}}
+{{/each}}
+/* ########################################################### */
+
+/* ########### Aliases to De-Initialization functions ########### */
+{{#each @root.object_cxt.list_resource_hw}}
+/*        {{hw_resource}}: aliases for De-Initialization functions */
+#define {{labels}}_deinit      {{lowercase hw_resource}}_deinit
+{{/each}}
+/* ########################################################### */
+
+/* ########### Aliases to get Object functions ########### */
+{{#each @root.object_cxt.list_resource_hw}}
+/*        {{hw_resource}}: aliases for get Object functions */
+#define {{labels}}_getobject      {{lowercase hw_resource}}_getobject
+{{/each}}
+
+/* ########################################################### */
+/* Exported functions ------------------------------------------------------- */
+#else
+
+
+/* Quick'n'dirty friday evening hack */
+
+/* Includes ------------------------------------------------------------------*/
+
+/* ugly hack while waiting to fix System Init codegen */
+#ifdef USE_TIM1
+#include "stm32_tim1.h"
+#endif /* USE_TIM1 */
+#ifdef USE_TIM4
+#include "stm32_tim4.h"
+#endif /* USE_TIM4 */
+#ifdef USE_CRC
+#include "stm32_crc.h"
+#endif /* USE_CRC */
+
+/* Hack : We know we will use basic trace for the bring up */
+#include "stm32_usart1.h"
+#include "stm32_hal.h"
+#include "stm32_gpio.h"
+
+/* Exported types ------------------------------------------------------------*/
+/* Exported constants --------------------------------------------------------*/
+
+/* LD7 (PH7) green LED is chosen by the generator for LED example status */
+#define MX_LED_USER_PORT            GPIOH
+#define MX_LED_USER_PIN             GPIO_PIN_7
+#define MX_LED_USER_CLK_ENABLE      __HAL_RCC_GPIOH_CLK_ENABLE
+#define MX_LED_USER_ACTIVE_STATE    GPIO_PIN_RESET
+#define MX_LED_USER_INACTIVE_STATE  GPIO_PIN_SET
+
+/* Hack: we define all that we need for PWM and CRC use-cases... */
+
+/* TIM PWM */
+#define MX_PWM_OUTPUT_1_CHANNEL_0 TIM_CHANNEL_1
+#define MX_PWM_OUTPUT_2_CHANNEL_0 TIM_CHANNEL_2
+
+/* Exported macro ------------------------------------------------------------*/
+
+/* ########### Aliases to initialization functions ########### */
+/*        usart1_instance4: aliases for initialization functions */
+#define mx_uart_trace_init  usart1_instance4_init
+/*        tim1_instance4: aliases for initialization functions */
+#define mx_pwm_output_1_init tim1_instance4_init
+/*        tim4_instance5: aliases for initialization functions */
+#define mx_pwm_output_2_init tim4_instance5_init
+/*        crc_instance3: aliases for initialization functions */
+#define mx_udp_crc_cfg1_init  crc_instance0_cfg1_init
+
+
+#define mx_gpio_led_user_init    stm32_gpio_init
+/* ########################################################### */
+
+/* ########### Aliases to De-Initialization functions ########### */
+/*        USART1: aliases for De-Initialization functions */
+#define mx_uart_trace_deinit  usart1_deinit
+/*        TIM1: aliases for De-Initialization functions */
+#define mx_pwm_output_1_deinit tim1_deinit
+/*        TIM4: aliases for De-Initialization functions */
+#define mx_pwm_output_2_deinit tim4_deinit
+/*        CRC: aliases for De-Initialization functions */
+#define mx_udp_crc_deinit  crc_deinit
+/* ########################################################### */
+
+/* ########### Aliases to get Object functions ########### */
+/*        USART1: aliases for get Object functions */
+#define mx_uart_trace_getobject  usart1_getobject
+/*        TIM1: aliases for get Object functions */
+#define mx_pwm_output_1_getobject      tim1_getobject
+/*        TIM4: aliases for get Object functions */
+#define mx_pwm_output_2_getobject      tim4_getobject
+
+/*        CRC: aliases for get Object functions */
+#define mx_udp_crc_getobject  crc_getobject
+/* ########################################################### */
+
+/* Exported functions ------------------------------------------------------- */
+
+#endif /* 0 */
+
+#ifdef __cplusplus
+}
+#endif
+
+#endif /* STM32_TARGET_H */

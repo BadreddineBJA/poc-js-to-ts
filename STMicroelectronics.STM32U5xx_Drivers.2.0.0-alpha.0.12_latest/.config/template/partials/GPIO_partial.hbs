@@ -1,0 +1,123 @@
+{{assign 'gpio_object' (@root.pinoutAPI.getSignalResource 'GPIO')~}}
+{{#if (eq step 'target_init')}}
+{{! }}
+{{! Generate the GPIO init functions section in stm32_target_template.h}}
+{{! > GPIO step='target_init'}}
+{{! }}
+{{#each @root.gpio_object}}
+{{#each group}}
+{{assign 'grp_name' name~}}
+{{assign 'grp_labels' info.labels~}}
+/*        GPIO {{#if (not (eq @root.grp_name ''))}}({{@root.grp_name}}){{/if}}: aliases for initialization functions */
+{{#each configs}}
+{{assign 'cfg_name' cfg_name~}}
+{{!#each @root.grp_labels}}
+#define mx_gpio{{addConfigLC this}}_init    stm32_gpio{{addConfigLC @root.grp_name}}{{addConfigLC @root.cfg_name}}_init
+{{!/each}}
+{{/each}}
+{{/each}}
+{{/each}}
+{{else if (eq step 'system_init')}}
+{{! }}
+{{! Generate the GPIO init functions section in stm32_target_template.h}}
+{{! > GPIO step='target_init'}}
+{{! }}
+{{#each @root.gpio_object}}
+{{#each group}}
+{{assign 'grp_name' name~}}
+{{assign 'grp_labels' info.labels}}
+  /*
+{{!#each @root.grp_labels}}
+    GPIO initialization: mx_gpio{{addConfigLC this}}_init
+{{!/each}}
+  */
+{{#each configs}}
+{{assign 'cfg_name' cfg_name~}}
+{{!#each @root.grp_labels}}
+  if (stm32_gpio{{addConfigLC @root.grp_name}}{{addConfigLC @root.cfg_name}}_init() == 0U)
+  {
+    ret = -1;
+    goto _end_init;
+  }
+
+{{!/each}}
+{{/each}}
+{{/each}}
+{{/each}}
+{{else if (eq step 'target_getobject')}}
+{{! }}
+{{! Generate the GPIO getobject function section in stm32_target_template.h}}
+{{! > GPIO step='target_getobject'}}
+{{! }}
+{{assign 'get_gpio_exti_object' (helper_exti_get_gpio this)~}}
+{{#if @root.get_gpio_exti_object.found_exti}}
+/*        GPIO ({{infos.label}}): aliases for get exti object functions */
+{{#each @root.get_gpio_exti_object.label_exti}}
+#define mx{{addConfigLC pin_label}}_exti_getobject   stm32_gpio_exti{{exti}}_getobject
+{{/each}}
+{{/if}}
+{{else if (eq step 'target_defines')}}
+{{! }}
+{{! Generate the GPIO defines section in stm32_target_template.h}}
+{{! > GPIO step='target_defines'}}
+{{! }}
+/* ############### Aliases on different PINS ################# */
+{{#each @root.gpio_object}}
+{{#each group}}
+/* Group label: "{{lowercase infos.label}}" definitions */
+{{#each configs}}
+/*        Config label: "{{lowercase cfg_name}}" definitions */
+{{#each gpio_list}}
+#define MX_{{uppercase label}}_PORT GPIO{{pad.port}}
+#define MX_{{uppercase label}}_PIN  GPIO_PIN_{{pad.pin}}
+{{/each}}
+{{/each}}
+{{/each}}
+{{/each}}
+/* ########################################################### */
+{{else if (eq step 'init')}}
+{{! }}
+{{! Generate the GPIO init code in MSP init function}}
+{{! }}
+  GPIO_InitTypeDef  GPIO_InitStruct;
+{{assign 'current_signals' (@root.pinoutAPI.getSignalResource @root.current_resource)~}}
+{{assign 'gpio_object' (helper_gpio_get_gpioservice_object cfg_name @root.current_signals)~}}
+{{assign 'resource' resource.resource}}
+{{#each @root.gpio_object.signals}}
+
+  /**
+    {{@root.resource}}{{addConfigUC label}} GPIO Configuration
+    P{{pad.port}}{{pad.pin}}    --------->  {{label}}
+    **/
+  __HAL_RCC_GPIO{{pad.port}}_CLK_ENABLE();
+
+  GPIO_InitStruct.Pin       = GPIO_PIN_{{pad.pin}};
+  /* Patch in waiting real configuration of the GPIO */
+  /* GPIO_InitStruct.Mode      = GPIO_MODE_{{GPIO_InitTypeDef.Mode.config}};
+  GPIO_InitStruct.Pull      = GPIO_{{GPIO_InitTypeDef.Pull}};
+  GPIO_InitStruct.Speed     = GPIO_SPEED_{{GPIO_InitTypeDef.Speed}}; */
+  GPIO_InitStruct.Mode      = GPIO_MODE_AF_PP;
+  GPIO_InitStruct.Pull      = GPIO_PULLUP;
+  GPIO_InitStruct.Speed     = GPIO_SPEED_FREQ_VERY_HIGH;
+  GPIO_InitStruct.Alternate = GPIO_{{function.id}}_{{@root.current_resource}};
+  HAL_GPIO_Init(GPIO{{pad.port}}, &GPIO_InitStruct);
+
+{{/each}}{{! config~}}
+{{! }}
+{{! Generate the GPIO deinit code in MSP init function}}
+{{! }}
+{{else if (eq step 'deinit')}}
+  /*###  Disable peripherals and GPIO Clocks #################################*/
+{{assign 'current_signals' (@root.pinoutAPI.getSignalResource @root.current_resource)~}}
+{{assign 'gpio_object' (helper_gpio_get_gpioservice_object cfg_name @root.current_signals)~}}
+{{assign 'resource' resource.resource}}
+{{#each @root.gpio_object.signals}}
+  /* Deinitialization of {{@root.resource}}{{addConfigUC ../cfg_name}}  */
+  HAL_GPIO_DeInit(GPIO{{pad.port}}, GPIO_PIN_{{pad.pin}});
+{{/each}}{{! config~}}
+{{else if (eq step 'target_include')}}
+#include "stm32_gpio.h"
+{{else if (eq step 'target_deinit')}}
+{{else}}
+#warning "Step not present in partial GPIO.hbs"
+{{/if}}

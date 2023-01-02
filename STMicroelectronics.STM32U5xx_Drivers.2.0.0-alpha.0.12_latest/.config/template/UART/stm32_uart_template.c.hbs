@@ -1,0 +1,141 @@
+{{! New template proposal to work with the HOOKS ~}}
+{{! get_myctx returns ~
+                instances: [...SWinstances],
+                resource:element.resource.toUpperCase(),
+    We may, in the future, also get the grouping strategy in this context object.
+    Today the HOOK has only 1 strategy: grouping all SW instances piloting the same HW instance.
+}}
+{{! This is a temporary solution while waiting for the getters ~}}
+{{#get_myctx~}}
+{{#with _myctx~}}
+{{log "UART template _myctx:" this~}}
+{{assign 'current_resource' this.resource~}}
+{{log "UART template current_resource:" @root.current_resource~}}
+/**
+  ******************************************************************************
+  * @file           : stm32_{{lowercase @root.current_resource}}.c
+  * @brief          : Peripheral initialization
+  *                   File per peripheral instance that is handling the peripheral
+  *                   initialization and the IRQ handlers. Init parameters provided
+  *                   as a set of defines configurable/generated for a given target
+  *                   through the  hal_usart_settings.json and the config tool.
+  ******************************************************************************
+  * @attention
+  *
+  * <h2><center>&copy; Copyright (c) {{COPYRIGHT}} STMicroelectronics.
+  * All rights reserved.</center></h2>
+  *
+  *{{LICENSE}}
+  *
+  ******************************************************************************
+  */
+/* Includes ------------------------------------------------------------------*/
+#include "stm32_{{lowercase @root.current_resource}}.h"
+
+/* Private typedef -----------------------------------------------------------*/
+/* Private define ------------------------------------------------------------*/
+/* Private macro -------------------------------------------------------------*/
+/* Private variables ---------------------------------------------------------*/
+/* Private functions prototype------------------------------------------------*/
+{{! declare all prototypes for all configs of all SW instances}}
+{{log "==> declare all MSP prototypes for all configs of all SW instances"~}}
+{{#each this.instances~}}
+{{assign 'current_instance_index' instanceid~}}
+{{log "UART template MSP current_instance_index:" @root.current_instance_index~}}
+{{#each this.configs}}
+static void {{lowercase @root.current_resource}}_instance{{@root.current_instance_index}}{{addConfigLC cfg_name}}_msp_init(UART_HandleTypeDef *ph_uart);
+static void {{lowercase @root.current_resource}}_instance{{@root.current_instance_index}}{{addConfigLC cfg_name}}_msp_deinit(UART_HandleTypeDef *ph_uart);
+{{/each}}
+{{/each}}
+
+/* Exported variables by reference--------------------------------------------*/
+{{! Only 1 handle for all sw instances: this works if we have only 1 functionality and 1 API level but WILL BE UPDATED}}
+{{! each SW instance can have an alias to this handle}}
+{{log "==> declare handle for: " @root.current_resource~}}
+static UART_HandleTypeDef gh_{{lowercase @root.current_resource}};
+
+{{#each this.instances}}
+{{assign 'current_instance_index' instanceid~}}
+{{log "UART template INIT current_instance_index:" @root.current_instance_index~}}
+{{#each this.configs}}
+void *{{lowercase @root.current_resource}}_instance{{@root.current_instance_index}}{{addConfigLC cfg_name}}_init(void)
+{
+  /* Configure {{lowercase @root.current_resource}} */
+  gh_{{lowercase @root.current_resource}}.Instance                    = {{@root.current_resource}};
+{{#each UART_InitTypeDef}}
+  gh_{{lowercase @root.current_resource}}.Init.{{@key}}             = {{this}};
+{{/each}}
+  gh_{{lowercase @root.current_resource}}.AdvancedInit.AdvFeatureInit = UART_ADVFEATURE_NO_INIT;
+
+  /* Register MspInit/MspDeInit */
+  HAL_UART_RegisterCallback(&gh_{{lowercase @root.current_resource}}, HAL_UART_MSPINIT_CB_ID, {{lowercase @root.current_resource}}_instance{{@root.current_instance_index}}{{addConfigLC cfg_name}}_msp_init);
+  HAL_UART_RegisterCallback(&gh_{{lowercase @root.current_resource}}, HAL_UART_MSPDEINIT_CB_ID, {{lowercase @root.current_resource}}_instance{{@root.current_instance_index}}{{addConfigLC cfg_name}}_msp_deinit);
+
+  if (HAL_UART_Init(&gh_{{lowercase @root.current_resource}}) != HAL_OK)
+  {
+    return NULL;
+  }
+
+  return (void *)&gh_{{lowercase @root.current_resource}};
+}
+{{/each}}
+{{/each}}
+
+void {{lowercase @root.current_resource}}_deinit(void)
+{
+  (void)HAL_UART_DeInit(&gh_{{lowercase @root.current_resource}});
+}
+
+void *{{lowercase @root.current_resource}}_getobject(void)
+{
+  return (void *)&gh_{{lowercase @root.current_resource}};
+}
+
+{{#each this.instances}}
+/* Private functions definition ----------------------------------------------*/
+{{#each configs}}
+{{assign 'current_settings' this~}}
+{{assign 'current_cfg_name' cfg_name~}}
+/**
+  * @brief {{@root.current_resource}}{{addConfigUC cfg_name}} MSP Initialization
+  * @param ph_uart USART handle pointer
+  * @retval None
+  */
+static void {{lowercase @root.current_resource}}_instance{{@root.current_instance_index}}{{addConfigLC cfg_name}}_msp_init(UART_HandleTypeDef *ph_uart)
+{
+
+
+{{assign 'clock_domain' (@root.clockAPI.getClockDomain)~}}
+{{assign 'clk_src' (helper_rcc_get_clock_input @root.clock_domain @root.current_resource)~}}
+{{#if @root.clk_src.found}}
+  RCC_PeriphCLKInitTypeDef periph_clk_config = {0};
+  periph_clk_config.PeriphClockSelection = RCC_PERIPHCLK_{{@root.current_resource}};
+  periph_clk_config.{{@root.clk_src.clockselection}} = {{@root.clk_src.input}};
+  if (HAL_RCCEx_PeriphCLKConfig(&periph_clk_config) != HAL_OK)
+  {
+    while (1);
+  }
+
+{{/if}}
+  /* Enable {{@root.current_resource}} clock */
+  __HAL_RCC_{{@root.current_resource}}_CLK_ENABLE();
+}
+
+/**
+  * @brief {{@root.current_resource}}{{addConfigUC cfg_name}} MSP De-initialization
+  * @param ph_uart USART handle pointer
+  * @retval None
+  */
+static void {{lowercase @root.current_resource}}_instance{{@root.current_instance_index}}{{addConfigLC cfg_name}}_msp_deinit(UART_HandleTypeDef *ph_uart)
+{
+  /* ### Reset peripherals ####################################################*/
+  __HAL_RCC_{{@root.current_resource}}_FORCE_RESET();
+  __HAL_RCC_{{@root.current_resource}}_RELEASE_RESET();
+
+}
+{{/each}}
+{{/each}}
+
+/************************ (C) COPYRIGHT STMicroelectronics *****END OF FILE****/
+{{/with~}}
+{{/get_myctx}}

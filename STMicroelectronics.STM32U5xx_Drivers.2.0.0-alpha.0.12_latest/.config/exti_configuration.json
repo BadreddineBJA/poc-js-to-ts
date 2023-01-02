@@ -1,0 +1,286 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema",
+  "componentid": "::Device:STM32U5xx HAL Code Gen:EXTI Init",
+  "type": "object",
+  "additionalProperties": false,
+  "properties": {
+    "resources": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "instance": {
+          "type": "string",
+          "resource_query": {
+            "type": "exti"
+          }
+        }
+      }
+    },
+    "blocks": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "infos": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "label": {
+              "title": "Label",
+              "type": "string",
+              "minLength": 3,
+              "maxLength": 32,
+              "$comment": "label associated to the instance of the peripheral, can be overridden at sample level. In this case it becomes read-only.",
+              "default": ""
+            },
+            "init_type": {
+              "title": "resource initialization code generation",
+              "type": "string",
+              "oneOf": [
+                {
+                  "const": "called"
+                },
+                {
+                  "const": "enabled"
+                },
+                {
+                  "const": "disabled"
+                }
+              ],
+              "description": "generate or not the PPP init code, call it or not at boot",
+              "$comment": "generate the init code of your PPP or not (enabled/disabled), call it automatically at startup or not (called/enabled)",
+              "default": "called"
+            },
+            "handle": {
+              "title": "handle",
+              "type": "string",
+              "minLength": 3,
+              "maxLength": 32,
+              "$comment": "this is the variable you will use in the code to deal with this instance",
+              "default": "hexti_${Instance}"
+            }
+          }
+        },
+        "configs": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "properties": {
+              "cfg_name": {
+                "type": "string",
+                "title": "Config name",
+                "description": "name of the configuration",
+                "minLength": 0,
+                "maxLength": 9,
+                "default": ""
+              },
+              "EXTI_ConfigTypeDef": {
+                "type": "object",
+                "additionalProperties": false,
+                "properties": {
+                  "Line": {
+                    "type": "integer",
+                    "description": "The Exti line to be configured. This parameter can be a value of  EXTI Line",
+                    "oneOf": [
+                      {
+                        "title": "LINE_0",
+                        "const": 0
+                      },
+                      {
+                        "title": "LINE_1",
+                        "const": 1
+                      },
+                      {
+                        "title": "LINE_2",
+                        "const": 2
+                      },
+                      {
+                        "title": "LINE_3",
+                        "const": 3
+                      },
+                      {
+                        "title": "LINE_4",
+                        "const": 4
+                      },
+                      {
+                        "title": "LINE_5",
+                        "const": 5
+                      },
+                      {
+                        "title": "LINE_6",
+                        "const": 6
+                      },
+                      {
+                        "title": "LINE_7",
+                        "const": 7
+                      },
+                      {
+                        "title": "LINE_8",
+                        "const": 8
+                      },
+                      {
+                        "title": "LINE_9",
+                        "const": 9
+                      },
+                      {
+                        "title": "LINE_10",
+                        "const": 10
+                      },
+                      {
+                        "title": "LINE_11",
+                        "const": 11
+                      },
+                      {
+                        "title": "LINE_12",
+                        "const": 12
+                      },
+                      {
+                        "title": "LINE_13",
+                        "const": 13
+                      },
+                      {
+                        "title": "LINE_14",
+                        "const": 14
+                      },
+                      {
+                        "title": "LINE_15",
+                        "const": 15
+                      },
+                      {
+                        "title": "LINE_16",
+                        "const": 16
+                      },
+                      {
+                        "title": "LINE_17",
+                        "const": 17
+                      },
+                      {
+                        "title": "LINE_18",
+                        "const": 18
+                      },
+                      {
+                        "title": "LINE_19",
+                        "const": 19
+                      },
+                      {
+                        "title": "LINE_20",
+                        "const": 20
+                      },
+                      {
+                        "title": "LINE_21",
+                        "const": 21
+                      },
+                      {
+                        "title": "LINE_22",
+                        "const": 22
+                      }
+                    ],
+                    "default": 0
+                  },
+                  "Mode": {
+                    "type": "string",
+                    "description": "The Exit Mode to be configured for a core. This parameter can be a combination of  EXTI Mode",
+                    "oneOf": [
+                      {
+                        "title": "NONE",
+                        "const": "EXTI_MODE_NONE"
+                      },
+                      {
+                        "title": "INTERRUPT",
+                        "const": "EXTI_MODE_INTERRUPT"
+                      },
+                      {
+                        "title": "EVENT",
+                        "const": "EXTI_MODE_EVENT"
+                      }
+                    ],
+                    "default": "EXTI_MODE_NONE"
+                  },
+                  "Trigger": {
+                    "actions": [
+                      {
+                        "type": "exclude",
+                        "condition": "17 <= $config.EXTI_ConfigTypeDef.Line $config.EXTI_ConfigTypeDef.Line <= 20"
+                      }
+                    ],
+                    "type": "string",
+                    "description": "The Exti Trigger to be configured. This parameter can be a value of  EXTI Trigger",
+                    "oneOf": [
+                      {
+                        "title": "NONE",
+                        "const": "EXTI_TRIGGER_NONE"
+                      },
+                      {
+                        "title": "RISING",
+                        "const": "EXTI_TRIGGER_RISING"
+                      },
+                      {
+                        "title": "FALLING",
+                        "const": "EXTI_TRIGGER_FALLING"
+                      },
+                      {
+                        "title": "RISING_FALLING",
+                        "const": "EXTI_TRIGGER_RISING_FALLING"
+                      }
+                    ],
+                    "default": "EXTI_TRIGGER_NONE"
+                  },
+                  "GPIOSel": {
+                    "actions": [
+                      {
+                        "type": "include",
+                        "condition": "$config.EXTI_ConfigTypeDef.Line $config.EXTI_ConfigTypeDef.Line < 16"
+                      }
+                    ],
+                    "type": "string",
+                    "description": "The Exti GPIO multiplexer selection to be configured. This parameter is only possible for line 0 to 15. It can be a value of  EXTI GPIOSel",
+                    "oneOf": [
+                      {
+                        "title": "GPIOA",
+                        "const": "EXTI_GPIOA"
+                      },
+                      {
+                        "title": "GPIOB",
+                        "const": "EXTI_GPIOB"
+                      },
+                      {
+                        "title": "GPIOC",
+                        "const": "EXTI_GPIOC"
+                      },
+                      {
+                        "title": "GPIOD",
+                        "const": "EXTI_GPIOD"
+                      },
+                      {
+                        "title": "GPIOE",
+                        "const": "EXTI_GPIOE"
+                      },
+                      {
+                        "title": "GPIOF",
+                        "const": "EXTI_GPIOF"
+                      },
+                      {
+                        "title": "GPIOG",
+                        "const": "EXTI_GPIOG"
+                      },
+                      {
+                        "title": "GPIOH",
+                        "const": "EXTI_GPIOH"
+                      },
+                      {
+                        "title": "GPIOI",
+                        "const": "EXTI_GPIOI"
+                      }
+                    ],
+                    "default": "EXTI_GPIOA"
+                  }
+                },
+                "description": "EXTI Configuration structure definition."
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}

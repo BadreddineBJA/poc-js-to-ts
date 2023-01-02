@@ -1,0 +1,68 @@
+{{#get_myctx~}}
+{{#with _myctx~}}
+{{assign 'current_resource' this.resource~}}
+/**
+  ******************************************************************************
+  * @file           : stm32_{{lowercase resource}}.h
+  * @brief:  Header for stm32_{{lowercase resource}}.c file.
+  ******************************************************************************
+  * @attention
+  *
+  * <h2><center>&copy; Copyright (c) {{COPYRIGHT}} STMicroelectronics.
+  * All rights reserved.</center></h2>
+  *
+  * This software is licensed under terms that can be found in the LICENSE file
+  * in the root directory of this software component.
+  * If no LICENSE file comes with this software, it is provided AS-IS.
+  *
+  ******************************************************************************
+  */
+
+/* Define to prevent recursive inclusion -------------------------------------*/
+#ifndef STM32_{{resource}}_H
+#define STM32_{{resource}}_H
+
+#ifdef __cplusplus
+extern "C" {
+#endif
+
+/* Includes ------------------------------------------------------------------*/
+#include "stm32_hal.h"
+
+/* Exported types ------------------------------------------------------------*/
+/* Exported constants --------------------------------------------------------*/
+/* Exported macro ------------------------------------------------------------*/
+/* Exported variables --------------------------------------------------------*/
+/* Exported functions ------------------------------------------------------- */
+
+{{#each this.instances}}
+{{assign 'current_instance_index' instanceid}}
+{{#each configs}}
+/**
+  * @brief {{lowercase @root.current_resource}}_instance{{@root.current_instance_index}}{{addConfigUC cfg_name}} init function
+  * This function configures the hardware resources used in this example
+  * @retval pointer to handle or NULL in case of failure
+  */
+void *{{lowercase @root.current_resource}}_instance{{@root.current_instance_index}}{{addConfigLC cfg_name}}_init(void);
+{{/each}}
+{{/each}}
+/**
+  * @brief  De-initialize {{lowercase resource}} instance and return it.
+  * @retval None
+  */
+void {{lowercase resource}}_deinit(void);
+
+/**
+  * @brief  Get the {{resource}} object.
+  * @retval Pointer on the {{resource}} Handle
+  */
+void *{{lowercase resource}}_getobject(void);
+
+#ifdef __cplusplus
+}
+#endif
+
+#endif /* STM32_{{resource}}_H */
+
+{{/with~}}
+{{/get_myctx~}}
