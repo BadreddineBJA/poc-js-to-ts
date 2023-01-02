@@ -1,0 +1,67 @@
+{{#if (eq step 'gen_system_clock_config')}}
+  RCC_OscInitTypeDef RCC_OscInitStruct = {0};
+  RCC_ClkInitTypeDef RCC_ClkInitStruct = {0};
+
+  /** Configure the main internal regulator output voltage
+  */
+  if (HAL_PWREx_ControlVoltageScaling(PWR_REGULATOR_VOLTAGE_SCALE1) != HAL_OK)
+  {
+    return -1;
+  }
+  /** Initializes the CPU, AHB and APB busses clocks
+  */
+{{assign 'clock_domain' (@root.clockAPI.getClockDomain)~}}
+{{assign 'clk_config_object' (helper_rcc_get_hal_clock_config_object_u5 @root.clock_domain)}}
+  RCC_OscInitStruct.OscillatorType = {{@root.clk_config_object.OscillatorType}};
+{{#if @root.clk_config_object.HSI}}
+  RCC_OscInitStruct.HSIState            = RCC_HSI_ON;
+  RCC_OscInitStruct.HSICalibrationValue = RCC_HSICALIBRATION_DEFAULT;
+{{/if}}
+{{#if @root.clk_config_object.MSI}}
+  RCC_OscInitStruct.MSIState            = RCC_MSI_ON;
+  RCC_OscInitStruct.MSICalibrationValue = RCC_MSICALIBRATION_DEFAULT;
+  RCC_OscInitStruct.MSIClockRange       = {{@root.clk_config_object.MSIRange}};
+{{/if}}
+
+{{#if @root.clk_config_object.PLL}}
+  RCC_OscInitStruct.PLL.PLLState = RCC_PLL_ON;
+  RCC_OscInitStruct.PLL.PLLSource = {{@root.clk_config_object.PLLSource}};
+  RCC_OscInitStruct.PLL.PLLMBOOST = RCC_PLLMBOOST_DIV1;
+  RCC_OscInitStruct.PLL.PLLM = {{@root.clk_config_object.PLLM}};
+  RCC_OscInitStruct.PLL.PLLN = {{@root.clk_config_object.PLLN}};
+  RCC_OscInitStruct.PLL.PLLP = {{@root.clk_config_object.PLLP}};
+  RCC_OscInitStruct.PLL.PLLQ = {{@root.clk_config_object.PLLQ}};
+  RCC_OscInitStruct.PLL.PLLR = {{@root.clk_config_object.PLLR}};
+  RCC_OscInitStruct.PLL.PLLRGE = {{@root.clk_config_object.PLLRGE}};
+  RCC_OscInitStruct.PLL.PLLFRACN = {{@root.clk_config_object.PLLFRACN}};
+{{/if}}
+  if (HAL_RCC_OscConfig(&RCC_OscInitStruct) != HAL_OK)
+  {
+    return -1;
+  }
+  /** Initializes the CPU, AHB and APB busses clocks
+  */
+  RCC_ClkInitStruct.ClockType = RCC_CLOCKTYPE_HCLK | RCC_CLOCKTYPE_SYSCLK
+                                | RCC_CLOCKTYPE_PCLK1 | RCC_CLOCKTYPE_PCLK2
+                                | RCC_CLOCKTYPE_PCLK3;
+  RCC_ClkInitStruct.SYSCLKSource = {{@root.clk_config_object.SysClkSource}};
+  RCC_ClkInitStruct.AHBCLKDivider = {{@root.clk_config_object.AHBPrescaler}};
+  RCC_ClkInitStruct.APB1CLKDivider = {{@root.clk_config_object.APB1Prescaler}};
+  RCC_ClkInitStruct.APB2CLKDivider = {{@root.clk_config_object.APB2Prescaler}};
+  RCC_ClkInitStruct.APB3CLKDivider = {{@root.clk_config_object.APB3Prescaler}};
+
+  if (HAL_RCC_ClockConfig(&RCC_ClkInitStruct, FLASH_LATENCY_4) != HAL_OK)
+  {
+    return -1;
+  }
+  __HAL_RCC_PWR_CLK_DISABLE();
+
+  return 0;
+{{else if (eq step 'target_include')}}
+{{else if (eq step 'target_init')}}
+{{else if (eq step 'target_deinit')}}
+{{else if (eq step 'target_defines')}}
+{{else if (eq step 'target_getobject')}}
+{{else}}
+#warning "RCC partial called but wrong step"
+{{/if}}

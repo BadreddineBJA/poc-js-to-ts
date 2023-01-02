@@ -1,0 +1,91 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema",
+  "componentid": "::Device:$FAMILYNAME_UC$ HAL Code Gen:GPIO Init",
+  "type": "object",
+  "additionalProperties": false,
+  "properties": {
+    "blocks": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "infos": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "labels": {
+              "title": "Label",
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            },
+            "generated": {
+              "title": "Generate init function",
+              "type": "boolean",
+              "default": true
+            }
+          }
+        },
+        "subcomponents": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "groups": {
+              "title": "Groups",
+              "type": "array",
+              "items": {
+                "type": "object",
+                "additionalProperties": false,
+                "properties": {
+                  "name": {
+                    "type": "string",
+                    "title": "Group name",
+                    "description": "name of the GPIO group",
+                    "minLength": 0,
+                    "maxLength": 9,
+                    "default": ""
+                  },
+                  "configs": {
+                    "type": "array",
+                    "items": {
+                      "type": "object",
+                      "additionalProperties": false,
+                      "@config-entity": "GPIO Group",
+                      "properties": {
+                        "cfg_name": {
+                          "type": "string",
+                          "title": "Config name",
+                          "description": "name of the configuration",
+                          "minLength": 0,
+                          "maxLength": 9,
+                          "default": ""
+                        },
+                        "gpio_list": {
+                          "type": "array",
+                          "items": {
+                            "type": "object",
+                            "properties": {
+                              "gpio": {
+                                "type": "object",
+                                "query": {
+                                  "type": "gpio_port_pin"
+                                }
+                              },
+                              "$include": {
+                                "id": "gpio_configuration.json"
+                              }
+                            }
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}

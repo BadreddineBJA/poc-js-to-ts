@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!-- ******************************************************************************
+ * File Name   : HAL_Driver_codegen.gpdsc
+ * Date        : 16/09/2022
+ * Description : STM32Cube HAL Drivers Generator PDSC File
+ ****************************************************************************** -->
+
+<package xmlns:xs="http://www.w3.org/2001/XMLSchema-instance" schemaVersion="1.0" xs:noNamespaceSchemaLocation="PACK.xsd">
+  <vendor>STMicroelectronics</vendor>
+  <name>STM32Cube_CodeGen</name>
+  <description>STM32Cube generated files for HAL drivers configuration</description>
+  <url>project-path</url>
+  <releases>
+    <release version="0.0.2">
+     - Updated for Cube 2.0 bringup : 16/09/2022
+    </release>
+    <release version="0.0.1">
+     - Generated: 01/03/2022
+    </release>
+  </releases>
+
+  <conditions>
+    <condition id="STM32U5 device">
+      <description>STMicroelectronics STM32U5 Devices</description>
+      <require Dvendor="STMicroelectronics:13" Dname="STM32U5*"/>
+    </condition>
+    <condition id="STM32U5 HAL">
+      <description>STMicroelectronics STM32U5 Device and HAL</description>
+      <require condition="STM32U5 device"/>
+      <require Cclass="Device" Cgroup="STM32 HAL" Csub="Common"/>
+    </condition>
+    <condition id="HAL Generated Code">
+      <description>STMicroelectronics HAL Generated code</description>
+      <require Cclass="Device" Cgroup="STM32 HAL Code Gen" Csub="Generated Code"/>
+      <require condition="STM32U5 HAL"/>
+    </condition>
+  </conditions>
+
+  <components>
+    <!-- TO BE STUDIED : for the time being we create this new component collecting all generated files -->
+    <!-- TODO : improve this thanks to the component id associated to the files                         -->
+    <!-- TODO : handle the version and description                                                      -->
+    <component generator="STM32Cube_CodeGen" Cclass="Device" Cgroup="STM32 HAL Code Gen" Csub="Generated Code"       Cversion="0.1.0" condition="HAL Generated Code">
+      <description>Temporary component that will store all the resulting generated code : TO BE IMPROVED</description>
+      <files>
+{{! Loop on the objects in my_array: each object is the result for a component }}
+{{#each my_array}}
+{{#each files}}
+        <!-- TODO: improve the location : .. could be in the gen_file -->
+        <file category="{{category}}" name="generated/{{gen_file}}" />
+{{/each}}
+{{/each}}
+      </files>
+    </component>
+  </components>
+</package>

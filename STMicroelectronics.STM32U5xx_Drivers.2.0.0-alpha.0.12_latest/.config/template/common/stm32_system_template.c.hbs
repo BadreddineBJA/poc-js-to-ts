@@ -1,0 +1,172 @@
+{{assign 'global_ctxt' (@root.ContextAPI.getGlobalContext)~}}
+{{log "SYSTEM template global_ctxt:" @root.global_ctxt~}}
+{{assign 'object_cxt' (helper_common_get_target_context @root.global_ctxt)~}}
+{{log "SYSTEM template object_cxt:" @root.object_cxt~}}
+/**
+  ******************************************************************************
+  * @file           : stm32_system.c
+  * @brief          : STM32 system program body
+  *                   Applicative target system level initialization
+  *                   (system clock, cache, TZ...) and system level peripherals
+  *                   initialization. system_init() service is called by the main
+  *                   before jumping the example entry point.
+  ******************************************************************************
+  * @attention
+  *
+  * <h2><center>&copy; Copyright (c) {{COPYRIGHT}} STMicroelectronics.
+  * All rights reserved.</center></h2>
+  *
+  * This software is licensed under terms that can be found in the LICENSE file
+  * in the root directory of this software component.
+  * If no LICENSE file comes with this software, it is provided AS-IS.
+  *
+  ******************************************************************************
+  */
+/* Includes ------------------------------------------------------------------*/
+#include "stm32_system.h"
+
+/* Private typedef -----------------------------------------------------------*/
+/* Private define ------------------------------------------------------------*/
+/* Private macro -------------------------------------------------------------*/
+/* Private variables ---------------------------------------------------------*/
+/* Private functions prototype------------------------------------------------*/
+static int32_t system_clock_config(void);
+static int32_t peripherals_init(void);
+
+/* Exported functions --------------------------------------------------------*/
+int32_t system_init(void)
+{
+  int32_t ret = -1;
+
+  if (HAL_Init() == HAL_OK)
+  {
+    if (system_clock_config() == 0)
+    {
+      if (peripherals_init() == 0)
+      {
+        ret = 0;
+      }
+    }
+  }
+
+  return ret;
+}
+
+void HAL_MspInit(void)
+{
+  __HAL_RCC_SYSCFG_CLK_ENABLE();
+  __HAL_RCC_PWR_CLK_ENABLE();
+
+  /** Disable the internal Pull-Up in Dead Battery pins of UCPD peripheral
+  */
+  HAL_PWREx_DisableUCPDDeadBattery();
+}
+
+/******************************************************************************/
+/*                            Systick Handler                                 */
+/******************************************************************************/
+/**
+  * @brief  This function handles SysTick Handler.
+  * @retval None
+  */
+void SysTick_Handler(void)
+{
+  HAL_IncTick();
+}
+
+#if 0
+
+/* TODO : update the template */
+
+/* Private functions definition ----------------------------------------------*/
+/**
+  * @brief  Peripherals initialization
+  * @retval 0   Success
+  * @retval -1  Initialization issue
+  */
+static int32_t peripherals_init(void)
+{
+  int32_t ret = 0;
+
+{{#each @root.object_cxt.periphs}}
+{{#if generated}}
+{{#if default}}
+  /*
+{{#each fct_name_labels}}
+    {{this}}_init
+{{/each}}
+  */
+  if ({{fct_name}}_init() == NULL)
+  {
+    ret = -1;
+    goto _end_init;
+  }
+
+{{else}}
+  /** {{fct_name}}_init() has been generated,
+{{#each fct_name_labels}}
+    * ({{this}}_init)
+{{/each}}
+    * but it is not the default configuration.
+    */
+
+{{/if}}
+{{else}}
+  /** {{fct_name}}_init()has been generated,
+{{#each fct_name_labels}}
+    * ({{this}}_init)
+{{/each}}
+    * but it is expected that application will call it when best needed
+    * according to application needs.
+    * See Cube code generator options: Generate and call Initialization function
+    */
+
+{{/if}}
+{{/each}}
+{{#if @root.object_cxt.need_goto_end}}
+_end_init:
+{{/if}}
+  return ret;
+}
+#else
+/* Quick'n'dirty friday evening hack */
+
+/* Private functions definition ----------------------------------------------*/
+/**
+  * brief  Peripherals initialization
+  * retval Status
+  */
+static int32_t peripherals_init(void)
+{
+  int32_t ret = 0;
+
+  /* TODO: discuss how to generate this */
+#ifdef USE_TRACE
+  /* mx_uart_trace_init */
+  if (usart1_instance4_init() == NULL)
+  {
+    ret = -1;
+  }
+#endif /* USE_TRACE */
+
+  /* mx_gpio_led_user_init */
+  if (stm32_gpio_init() != 0)
+  {
+    ret = -1;
+  }
+
+  return ret;
+}
+
+#endif /* 0 */
+
+/**
+  * @brief  System Clock Configuration
+  * @retval Status
+  */
+static int32_t system_clock_config(void)
+{
+{{#> RCC step='gen_system_clock_config'}}
+#warning "RCC partials not present"
+{{/RCC}}
+}

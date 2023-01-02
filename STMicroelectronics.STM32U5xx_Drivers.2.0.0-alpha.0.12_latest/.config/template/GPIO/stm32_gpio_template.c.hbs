@@ -1,0 +1,99 @@
+{{! New template proposal to work with the HOOKS ~}}
+{{! get_myctx returns ~
+                instances: [...SWinstances],
+                resource:element.resource.toUpperCase(),
+    We may, in the future, also get the grouping strategy in this context object.
+    Today the HOOK has only 1 strategy: grouping all SW instances piloting the same HW instance.
+}}
+{{! This is a temporary solution while waiting for the getters ~}}
+{{assign 'current_signals' (@root.pinoutAPI.getSignalResource 'GPIO')~}}
+{{log "GPIO template current_signals:" @root.current_signals~}}
+/**
+  ******************************************************************************
+  * @file    stm32_gpio.c
+  * @brief   Initialisation of all the peripherals used in this project
+  *          File per peripheral instance that is handling the peripheral
+  *          initialization and the IRQ handlers. Init parameters provided
+  *          as a set of defines configurable/generated for a given target
+  *          through the  hal_gpio_settings.json and the config tool.
+  *
+  ******************************************************************************
+  * @attention
+  *
+  * <h2><center>&copy; Copyright (c) {{COPYRIGHT}} STMicroelectronics.
+  * All rights reserved.</center></h2>
+  *
+  * This software is licensed under terms that can be found in the LICENSE file
+  * in the root directory of this software component.
+  * If no LICENSE file comes with this software, it is provided AS-IS.
+  *
+  ******************************************************************************
+  */
+
+/* Includes ------------------------------------------------------------------*/
+#include "stm32_gpio.h"
+
+/* Exported types ------------------------------------------------------------*/
+/* Exported constants --------------------------------------------------------*/
+/* Private define ------------------------------------------------------------*/
+/* Private functions ---------------------------------------------------------*/
+/* Exported variables by reference -------------------------------------------*/
+{{#each @root.current_signals}}
+{{#> EXTI step='gpio_exti_object'}}
+#warning "EXTI partials not present"
+{{/EXTI}}
+{{#> EXTI step='gpio_exti_variables'}}
+{{/EXTI}}
+
+{{#each group}}
+{{assign 'grp_name' name~}}
+{{#each configs}}
+{{assign 'gpio_object' (helper_gpio_get_pin_config gpio_list)~}}
+{{assign 'cfg_name' cfg_name~}}
+int32_t stm32_gpio{{addConfigLC @root.grp_name}}{{addConfigLC @root.cfg_name}}_init(void)
+{
+  GPIO_InitTypeDef  init_struct;
+
+  /* Enable peripherals and GPIO Clocks #################################*/
+{{#each @root.gpio_object.list_gpio}}
+  /*  {{this}}  Clock activation */
+  __HAL_RCC_{{this}}_CLK_ENABLE();
+{{/each}}
+
+{{#each @root.gpio_object.GPIOS}}
+{{! active_state is HW board dependent. Need a getter to retrieve the
+default to be applied}}
+{{#if active_state}}
+  HAL_GPIO_WritePin({{port}}, GPIO_PIN_{{pin}}, GPIO_PIN_SET);
+{{/if}}
+
+{{! if low_power is enabled, translated GPIO pin to LPGIO pin
+ex GPIOA pin 1 in low power configures LPGIO1 pin 0}}
+  init_struct.Pin      = {{pins}};
+  init_struct.Mode     = {{mode}};
+{{#if speed}}
+  init_struct.Speed    = {{speed}};
+{{/if}}
+  init_struct.Pull     = {{pull}};
+  HAL_GPIO_Init({{port}}, &init_struct);
+{{/each}}
+
+{{#each @root.gpio_object.hslv}}
+{{#if high_speed_low_voltage}}
+  HAL_GPIO_EnableHighSPeedLowVoltage({{port}}, {{pins}});
+{{else}}
+  HAL_GPIO_DisableHighSPeedLowVoltage({{port}}, {{pins}});
+{{/if}}
+{{/each}}
+
+{{#> EXTI step='gpio_exti_init'}}
+{{/EXTI}}
+
+  return 0;
+}
+{{/each}}
+{{/each}}
+
+{{#> EXTI step='gpio_exti_getobject'}}
+{{/EXTI}}
+{{/each}}

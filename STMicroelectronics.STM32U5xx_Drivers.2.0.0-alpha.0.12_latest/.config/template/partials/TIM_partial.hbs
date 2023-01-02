@@ -1,0 +1,23 @@
+{{!~}}
+{{#if (eq step 'target_defines')}}
+{{assign 'tim_ctxt' (helper_common_get_resource_ctxt @root.global_ctxt component)}}
+/* ############ Aliases on different TIM Channels ############ */
+{{#each @root.tim_ctxt}}
+{{assign 'current_instanceid' instanceid~}}
+{{assign 'current_hw_resource' settings.resources.instance.id~}}
+{{assign 'current_labels' settings.blocks.info.labels~}}
+{{#each settings.blocks.configs}}
+{{assign 'current_cfgname' cfg_name~}}
+{{#each channels}}
+{{assign 'index_channel' @index~}}
+{{#each @root.current_labels}}
+#define MX_{{uppercase this}}{{addConfigUC @root.current_cfgname}}_CHANNEL_{{@root.index_channel}} TIM_CHANNEL_{{../channel}}
+{{/each}}
+{{/each}}
+{{/each}}
+{{/each}}
+/* ########################################################### */
+{{!~}}
+{{else}}
+#warning "Step not present in partial TIM.hbs"
+{{/if}}

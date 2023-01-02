@@ -1,0 +1,220 @@
+{{#if (eq step 'gpio_exti_object')}}
+{{! create exti object used for EXTI code generation}}
+{{assign 'get_gpio_exti_object' (helper_exti_get_gpio this)~}}
+{{else if (eq step 'gpio_exti_variables')}}
+{{#if @root.get_gpio_exti_object.found_exti}}
+{{#each @root.get_gpio_exti_object.exti}}
+static EXTI_HandleTypeDef gh_gpio_exti{{this}};
+{{/each}}
+{{/if}}
+{{else if (eq step 'gpio_exti_init')}}
+{{assign 'get_exti_cfg_config_object' (helper_exti_get_config gpio_list)~}}
+{{#if @root.get_exti_cfg_config_object.found_exti}}
+  EXTI_ConfigTypeDef exti_config;
+{{#each @root.get_exti_cfg_config_object.exti_list}}
+  exti_config.Line    = EXTI_LINE_{{line}};
+  exti_config.Mode    = EXTI_MODE_NONE;
+  exti_config.Trigger = EXTI_TRIGGER_{{trigger}};
+  exti_config.GPIOSel = EXTI_{{port}};
+
+  if (HAL_EXTI_SetConfigLine(&gh_gpio_exti{{line}}, &exti_config) != HAL_OK)
+  {
+    return -1;
+  }
+{{/each}}
+{{/if}}
+{{else if (eq step 'gpio_exti_getobject')}}
+{{#if @root.get_gpio_exti_object.found_exti}}
+{{#each @root.get_gpio_exti_object.exti}}
+void *stm32_gpio_exti{{this}}_getobject(void)
+{
+  return (void *)&gh_gpio_exti{{this}};
+}
+void EXTI{{this}}_IRQHandler(void)
+{
+  HAL_EXTI_IRQHandler(&gh_gpio_exti{{this}});
+}
+{{/each}}
+
+
+int32_t stm32_gpio_enable_irq(void *p_object, uint32_t preemptpriority, uint32_t subpriority)
+{
+  IRQn_Type irqline;
+  int32_t status = 0;
+  EXTI_ConfigTypeDef exti_config;
+  HAL_EXTI_GetConfigLine((EXTI_HandleTypeDef *)p_object, &exti_config);
+
+  exti_config.Mode    = EXTI_MODE_INTERRUPT;
+
+  if (HAL_EXTI_SetConfigLine((EXTI_HandleTypeDef*)p_object, &exti_config) != HAL_OK)
+  {
+    return -1;
+  }
+
+  switch (exti_config.Line)
+  {
+    case EXTI_LINE_0:
+      irqline = EXTI0_IRQn;
+      break;
+    case EXTI_LINE_1:
+      irqline = EXTI1_IRQn;
+      break;
+    case EXTI_LINE_2:
+      irqline = EXTI2_IRQn;
+      break;
+    case EXTI_LINE_3:
+      irqline = EXTI3_IRQn;
+      break;
+    case EXTI_LINE_4:
+      irqline = EXTI4_IRQn;
+      break;
+    case EXTI_LINE_5:
+      irqline = EXTI5_IRQn;
+      break;
+    case EXTI_LINE_6:
+      irqline = EXTI6_IRQn;
+      break;
+    case EXTI_LINE_7:
+      irqline = EXTI7_IRQn;
+      break;
+    case EXTI_LINE_8:
+      irqline = EXTI8_IRQn;
+      break;
+    case EXTI_LINE_9:
+      irqline = EXTI9_IRQn;
+      break;
+    case EXTI_LINE_10:
+      irqline = EXTI10_IRQn;
+      break;
+    case EXTI_LINE_11:
+      irqline = EXTI11_IRQn;
+      break;
+    case EXTI_LINE_12:
+      irqline = EXTI12_IRQn;
+      break;
+    case EXTI_LINE_13:
+      irqline = EXTI13_IRQn;
+      break;
+    case EXTI_LINE_14:
+      irqline = EXTI14_IRQn;
+      break;
+    case EXTI_LINE_15:
+      irqline = EXTI15_IRQn;
+      break;
+    default:
+      status = -1;
+      break;
+  }
+
+  /* EXTI interrupt init*/
+  if (status == 0)
+  {
+    HAL_NVIC_SetPriority(irqline, preemptpriority, subpriority);
+    HAL_NVIC_EnableIRQ(irqline);
+  }
+
+  return status;
+}
+
+int32_t stm32_gpio_disable_irq(void *p_object)
+{
+  IRQn_Type irqline;
+  int32_t status = 0;
+  EXTI_ConfigTypeDef exti_config;
+  HAL_EXTI_GetConfigLine((EXTI_HandleTypeDef *)p_object, &exti_config);
+
+  exti_config.Mode    = EXTI_MODE_NONE;
+
+  if (HAL_EXTI_SetConfigLine((EXTI_HandleTypeDef*)p_object, &exti_config) != HAL_OK)
+  {
+    return -1;
+  }
+
+  switch (exti_config.Line)
+  {
+    case EXTI_LINE_0:
+      irqline = EXTI0_IRQn;
+      break;
+    case EXTI_LINE_1:
+      irqline = EXTI1_IRQn;
+      break;
+    case EXTI_LINE_2:
+      irqline = EXTI2_IRQn;
+      break;
+    case EXTI_LINE_3:
+      irqline = EXTI3_IRQn;
+      break;
+    case EXTI_LINE_4:
+      irqline = EXTI4_IRQn;
+      break;
+    case EXTI_LINE_5:
+      irqline = EXTI5_IRQn;
+      break;
+    case EXTI_LINE_6:
+      irqline = EXTI6_IRQn;
+      break;
+    case EXTI_LINE_7:
+      irqline = EXTI7_IRQn;
+      break;
+    case EXTI_LINE_8:
+      irqline = EXTI8_IRQn;
+      break;
+    case EXTI_LINE_9:
+      irqline = EXTI9_IRQn;
+      break;
+    case EXTI_LINE_10:
+      irqline = EXTI10_IRQn;
+      break;
+    case EXTI_LINE_11:
+      irqline = EXTI11_IRQn;
+      break;
+    case EXTI_LINE_12:
+      irqline = EXTI12_IRQn;
+      break;
+    case EXTI_LINE_13:
+      irqline = EXTI13_IRQn;
+      break;
+    case EXTI_LINE_14:
+      irqline = EXTI14_IRQn;
+      break;
+    case EXTI_LINE_15:
+      irqline = EXTI15_IRQn;
+      break;
+    default:
+      status = -1;
+      break;
+  }
+
+  /* EXTI interrupt init*/
+  if (status == 0)
+  {
+    HAL_NVIC_DisableIRQ(irqline);
+  }
+
+  return status;
+}
+
+int32_t stm32_gpio_pin_register_callback(void *p_object, void (*pCb)(void))
+{
+  if (HAL_EXTI_RegisterCallback((EXTI_HandleTypeDef *)p_object,  HAL_EXTI_COMMON_CB_ID, pCb) != HAL_OK)
+  {
+    return -1;
+  }
+
+  return 0;
+}
+{{/if}}
+{{else if (eq step 'gpio_exti_getobject_proto')}}
+{{#if @root.get_gpio_exti_object.found_exti}}
+{{#each @root.get_gpio_exti_object.exti}}
+void    *stm32_gpio_exti{{this}}_getobject(void);
+void    EXTI{{this}}_IRQHandler(void);
+{{/each}}
+
+int32_t stm32_gpio_enable_irq(void *p_object, uint32_t preemptpriority, uint32_t subpriority);
+int32_t stm32_gpio_disable_irq(void *p_object);
+int32_t stm32_gpio_pin_register_callback(void *p_object, void (*pCb)(void));
+{{/if}}
+{{else}}
+#warning "EXTI partial called but wrong step"
+{{/if}}
