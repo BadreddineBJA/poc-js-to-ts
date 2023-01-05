@@ -1,0 +1,584 @@
+{
+    "cube.clock-configuration": [
+      {
+        "id": "HSI",
+        "value": 16000000,
+        "frequency": 16000000
+      },
+      {
+        "id": "HSE",
+        "value": 6000000,
+        "frequency": 6000000
+      },
+      {
+        "id": "SAI1_EXT_Source",
+        "value": 48000,
+        "frequency": 48000
+      },
+      {
+        "id": "LSI",
+        "value": 32000,
+        "frequency": 32000
+      },
+      {
+        "id": "LSE",
+        "value": 32768,
+        "frequency": 32768
+      },
+      {
+        "id": "MSIS",
+        "value": 4000000,
+        "frequency": 4000000
+      },
+      {
+        "id": "MSIK",
+        "value": 4000000,
+        "frequency": 4000000
+      },
+      {
+        "id": "HSI48",
+        "value": 48000000,
+        "frequency": 48000000
+      },
+      {
+        "id": "SHSI",
+        "value": 48000000,
+        "frequency": 48000000
+      },
+      {
+        "id": "HSE_Divider_RTC",
+        "value": 32,
+        "frequency": 187500
+      },
+      {
+        "id": "LSI_Divider_RTC",
+        "value": 1,
+        "frequency": 32000
+      },
+      {
+        "id": "RTC_Clock_Source",
+        "value": "LSE_Input",
+        "frequency": 32768
+      },
+      {
+        "id": "RTC_Input_Clock",
+        "value": 32000,
+        "frequency": 32768
+      },
+      {
+        "id": "IWDG_Input_Clock",
+        "value": 32000,
+        "frequency": 32000
+      },
+      {
+        "id": "UCPD1_Input_Clock",
+        "value": 16000000,
+        "frequency": 16000000
+      },
+      {
+        "id": "CRS_Input_Clock",
+        "value": 48000000,
+        "frequency": 48000000
+      },
+      {
+        "id": "SHSI_Divider_SAES",
+        "value": 2,
+        "frequency": 24000000
+      },
+      {
+        "id": "SAES_Clock_Source",
+        "value": "SHSI_Input",
+        "frequency": 48000000
+      },
+      {
+        "id": "SAES_Input_Clock",
+        "value": 4000000,
+        "frequency": 48000000
+      },
+      {
+        "id": "PLL1_Clock_Source",
+        "value": "MSIS_Input",
+        "frequency": 4000000
+      },
+      {
+        "id": "PLL2_Clock_Source",
+        "value": "MSIS_Input",
+        "frequency": 4000000
+      },
+      {
+        "id": "PLL3_Clock_Source",
+        "value": "MSIS_Input",
+        "frequency": 4000000
+      },
+      {
+        "id": "PLLM",
+        "value": 1,
+        "frequency": 4000000
+      },
+      {
+        "id": "PLL2M",
+        "value": 1,
+        "frequency": 4000000
+      },
+      {
+        "id": "PLL3M",
+        "value": 1,
+        "frequency": 4000000
+      },
+      {
+        "id": "PLLN",
+        "value": 129,
+        "frequency": ""
+      },
+      {
+        "id": "PLL2N",
+        "value": 129,
+        "frequency": ""
+      },
+      {
+        "id": "PLL3N",
+        "value": 129,
+        "frequency": ""
+      },
+      {
+        "id": "PLLR",
+        "value": 2,
+        "frequency": ""
+      },
+      {
+        "id": "PLL2R",
+        "value": 2,
+        "frequency": ""
+      },
+      {
+        "id": "PLL3R",
+        "value": 2,
+        "frequency": ""
+      },
+      {
+        "id": "PLLQ",
+        "value": 2,
+        "frequency": ""
+      },
+      {
+        "id": "PLL2Q",
+        "value": 2,
+        "frequency": ""
+      },
+      {
+        "id": "PLL3Q",
+        "value": 2,
+        "frequency": ""
+      },
+      {
+        "id": "PLLP",
+        "value": 2,
+        "frequency": ""
+      },
+      {
+        "id": "PLL2P",
+        "value": 2,
+        "frequency": ""
+      },
+      {
+        "id": "PLL3P",
+        "value": 2,
+        "frequency": ""
+      },
+      {
+        "id": "System_Clock_Source",
+        "value": "MSIS_Input",
+        "frequency": 4000000
+      },
+      {
+        "id": "System_Clock_Frequency",
+        "value": 4000000,
+        "frequency": 4000000
+      },
+      {
+        "id": "AHB_divider",
+        "value": 1,
+        "frequency": 4000000
+      },
+      {
+        "id": "HCLK_Frequency",
+        "value": 4000000,
+        "frequency": 4000000
+      },
+      {
+        "id": "AHB_Divider_Cortex",
+        "value": 1,
+        "frequency": 4000000
+      },
+      {
+        "id": "cortex_Clock_Source",
+        "value": "AHB_Divider_Cortex_Input",
+        "frequency": 4000000
+      },
+      {
+        "id": "Cortex_Input_Clock",
+        "value": 4000000,
+        "frequency": 4000000
+      },
+      {
+        "id": "APB1_divider",
+        "value": 1,
+        "frequency": 4000000
+      },
+      {
+        "id": "APB1_Peripheral_Clock",
+        "value": 4000000,
+        "frequency": 4000000
+      },
+      {
+        "id": "APB1_Multipler_timer",
+        "value": 1,
+        "frequency": 4000000
+      },
+      {
+        "id": "APB1_Timer_Clock",
+        "value": 4000000,
+        "frequency": 4000000
+      },
+      {
+        "id": "APB2_divider",
+        "value": 1,
+        "frequency": 4000000
+      },
+      {
+        "id": "APB2_Peripheral_Clock",
+        "value": 4000000,
+        "frequency": 4000000
+      },
+      {
+        "id": "APB2_Multipler_timer",
+        "value": 1,
+        "frequency": 4000000
+      },
+      {
+        "id": "APB2_Timer_Clock",
+        "value": 4000000,
+        "frequency": 4000000
+      },
+      {
+        "id": "APB3_divider",
+        "value": 1,
+        "frequency": 4000000
+      },
+      {
+        "id": "APB3_Peripheral_Clock",
+        "value": 4000000,
+        "frequency": 4000000
+      },
+      {
+        "id": "FCLK_Cortex_Clock",
+        "value": 4000000,
+        "frequency": 4000000
+      },
+      {
+        "id": "CLK48_Clock_Source",
+        "value": "HSI48_Input",
+        "frequency": 48000000
+      },
+      {
+        "id": "USB_Input_Clock",
+        "value": 48000000,
+        "frequency": 48000000
+      },
+      {
+        "id": "CLK48_Input_Clock",
+        "value": 48000000,
+        "frequency": 48000000
+      },
+      {
+        "id": "I2C1_Clock_Source",
+        "value": "APB1_Input",
+        "frequency": 4000000
+      },
+      {
+        "id": "I2C1_Input_Clock",
+        "value": 4000000,
+        "frequency": 4000000
+      },
+      {
+        "id": "I2C2_Clock_Source",
+        "value": "APB1_Input",
+        "frequency": 4000000
+      },
+      {
+        "id": "I2C2_Input_Clock",
+        "value": 4000000,
+        "frequency": 4000000
+      },
+      {
+        "id": "I2C3_Clock_Source",
+        "value": "APB3_Input",
+        "frequency": 4000000
+      },
+      {
+        "id": "I2C3_Input_Clock",
+        "value": 4000000,
+        "frequency": 4000000
+      },
+      {
+        "id": "I2C4_Clock_Source",
+        "value": "APB1_Input",
+        "frequency": 4000000
+      },
+      {
+        "id": "I2C4_Input_Clock",
+        "value": 4000000,
+        "frequency": 4000000
+      },
+      {
+        "id": "DAC_Clock_Source",
+        "value": "LSI_Input",
+        "frequency": 32000
+      },
+      {
+        "id": "DAC_Input_Clock",
+        "value": 32000,
+        "frequency": 32000
+      },
+      {
+        "id": "SAI1_Clock_Source",
+        "value": "PLL2P_Input",
+        "frequency": ""
+      },
+      {
+        "id": "SAI1_Input_Clock",
+        "value": 258000000,
+        "frequency": ""
+      },
+      {
+        "id": "SAI2_Clock_Source",
+        "value": "PLL2P_Input",
+        "frequency": ""
+      },
+      {
+        "id": "SAI2_Input_Clock",
+        "value": 258000000,
+        "frequency": ""
+      },
+      {
+        "id": "OCTOSPI_Clock_Source",
+        "value": "System_Input",
+        "frequency": 4000000
+      },
+      {
+        "id": "OCTOSPI_Input_Clock",
+        "value": 4000000,
+        "frequency": 4000000
+      },
+      {
+        "id": "MDF1_Clock_Source",
+        "value": "AHB_Input",
+        "frequency": 4000000
+      },
+      {
+        "id": "MDF1_Input_Clock",
+        "value": 4000000,
+        "frequency": 4000000
+      },
+      {
+        "id": "ADC1_4_Clock_Source",
+        "value": "AHB_Input",
+        "frequency": 4000000
+      },
+      {
+        "id": "ADC1_4_Input_Clock",
+        "value": 16000000,
+        "frequency": 4000000
+      },
+      {
+        "id": "ADF1_Clock_Source",
+        "value": "AHB_Input",
+        "frequency": 4000000
+      },
+      {
+        "id": "ADF1_Input_Clock",
+        "value": 4000000,
+        "frequency": 4000000
+      },
+      {
+        "id": "USART1_Clock_Source",
+        "value": "APB2_Input",
+        "frequency": 4000000
+      },
+      {
+        "id": "USART1_Input_Clock",
+        "value": 4000000,
+        "frequency": 4000000
+      },
+      {
+        "id": "LPUART1_Clock_Source",
+        "value": "APB3_Input",
+        "frequency": 4000000
+      },
+      {
+        "id": "LPUART1_Input_Clock",
+        "value": 4000000,
+        "frequency": 4000000
+      },
+      {
+        "id": "USART3_Clock_Source",
+        "value": "APB1_Input",
+        "frequency": 4000000
+      },
+      {
+        "id": "USART3_Input_Clock",
+        "value": 4000000,
+        "frequency": 4000000
+      },
+      {
+        "id": "USART2_Clock_Source",
+        "value": "APB1_Input",
+        "frequency": 4000000
+      },
+      {
+        "id": "USART2_Input_Clock",
+        "value": 4000000,
+        "frequency": 4000000
+      },
+      {
+        "id": "UART5_Clock_Source",
+        "value": "APB1_Input",
+        "frequency": 4000000
+      },
+      {
+        "id": "UART5_Input_Clock",
+        "value": 4000000,
+        "frequency": 4000000
+      },
+      {
+        "id": "UART4_Clock_Source",
+        "value": "APB1_Input",
+        "frequency": 4000000
+      },
+      {
+        "id": "UART4_Input_Clock",
+        "value": 4000000,
+        "frequency": 4000000
+      },
+      {
+        "id": "LPTIM1_Clock_Source",
+        "value": "MSIK_Input",
+        "frequency": 4000000
+      },
+      {
+        "id": "LPTIM1_Input_Clock",
+        "value": 4000000,
+        "frequency": 4000000
+      },
+      {
+        "id": "LPTIM2_Clock_Source",
+        "value": "APB1_Input",
+        "frequency": 4000000
+      },
+      {
+        "id": "LPTIM2_Input_Clock",
+        "value": 4000000,
+        "frequency": 4000000
+      },
+      {
+        "id": "SPI1_Clock_Source",
+        "value": "system_source_Input",
+        "frequency": 4000000
+      },
+      {
+        "id": "SPI1_Input_Clock",
+        "value": 4000000,
+        "frequency": 4000000
+      },
+      {
+        "id": "LPTIM3_4_Clock_Source",
+        "value": "MSIK_Input",
+        "frequency": 4000000
+      },
+      {
+        "id": "LPTIM3_4_Input_Clock",
+        "value": 4000000,
+        "frequency": 4000000
+      },
+      {
+        "id": "SDMMC1_2_Clock_Source",
+        "value": "PLL1P_Input",
+        "frequency": ""
+      },
+      {
+        "id": "SDMMC1_2_Input_Clock",
+        "value": 258000000,
+        "frequency": ""
+      },
+      {
+        "id": "HSI48_Divider",
+        "value": 2,
+        "frequency": 24000000
+      },
+      {
+        "id": "RNG_Clock_Source",
+        "value": "HSI48_Input",
+        "frequency": 48000000
+      },
+      {
+        "id": "RNG_Input_Clock",
+        "value": 48000000,
+        "frequency": 48000000
+      },
+      {
+        "id": "FDCAN1_Clock_Source",
+        "value": "PLL1Q_Input",
+        "frequency": ""
+      },
+      {
+        "id": "FDCAN1_Input_Clock",
+        "value": 258000000,
+        "frequency": ""
+      },
+      {
+        "id": "SPI2_Clock_Source",
+        "value": "system_source_Input",
+        "frequency": 4000000
+      },
+      {
+        "id": "SPI2_Input_Clock",
+        "value": 4000000,
+        "frequency": 4000000
+      },
+      {
+        "id": "SPI3_Clock_Source",
+        "value": "system_source_Input",
+        "frequency": 4000000
+      },
+      {
+        "id": "SPI3_Input_Clock",
+        "value": 4000000,
+        "frequency": 4000000
+      },
+      {
+        "id": "LSCO_Clock_Source",
+        "value": "LSI_Input",
+        "frequency": 32000
+      },
+      {
+        "id": "LSCO_Input_Clock",
+        "value": 32000,
+        "frequency": 32000
+      },
+      {
+        "id": "MCO_Clock_Source",
+        "value": "Sys_Input",
+        "frequency": 4000000
+      },
+      {
+        "id": "MCO_div_Clock",
+        "value": 1,
+        "frequency": 4000000
+      },
+      {
+        "id": "MCO_Input_Source",
+        "value": 4000000,
+        "frequency": 4000000
+      }
+    ]
+  }

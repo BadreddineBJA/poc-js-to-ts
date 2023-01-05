@@ -1,0 +1,283 @@
+{
+    "software": {
+      "mockData description": [
+        {
+          "instanceid": 5,
+          "name": "mockData",
+          "settings": {
+            "blocks": {
+              "configs": [
+                {
+                  "configId": "Config1",
+                  "version": 1.5,
+                  "clockSpeed": 2166,
+                  "bandwidth": 20,
+                  "nestedObject": {
+                    "isRunning": true
+                  }
+                }
+              ]
+            }
+          }
+        }
+      ],
+      "STMicroelectronics::Device:STM32 HAL:HAL OS&FreeRTOS@0.0.1": [
+        {
+          "instanceid": 6,
+          "name": "FreeRTOS",
+          "settings": {
+            "blocks": {
+              "info": {
+                "name": "FreeRTOS",
+                "version": "10.3.1"
+              },
+              "configs": [
+                {
+                  "cfg_name": "Init",
+                  "Core_Configuration_Parameters": {
+                    "USE_PREEMPTION": true,
+                    "API": "CMSIS_V2",
+                    "TICK_RATE_HZ": 1000,
+                    "PRIO_BITS": 4,
+                    "MAX_PRIORITIES": 7,
+                    "USE_PORT_OPTIMISED_TASK_SELECTION": true,
+                    "TIMER_QUEUE_LENGTH": 12,
+                    "MEMORY_ALLOCATION": "DYNAMIC",
+                    "HEAP_NUMBER": "heap_4",
+                    "USE_TASK_NOTIFICATIONS": true,
+                    "TIMER_TASK_PRIORITY": 3
+                  },
+                  "Include_Parameters": {
+                    "vTaskPrioritySet": false,
+                    "pcTaskGetTaskName": false,
+                    "xSemaphoreGetMutexHolder": false,
+                    "xTaskGetSchedulerState": true,
+                    "uxTaskPriorityGet": false,
+                    "vTaskDelete": true,
+                    "vTaskCleanUpResources": true,
+                    "vTaskDelayUntil": true,
+                    "vTaskDelay": false
+                  }
+                },
+                {
+                  "cfg_name": "Low-Power",
+                  "Core_Configuration_Parameters": {
+                    "USE_PREEMPTION": false,
+                    "API": "CMSIS_V2",
+                    "PRIO_BITS": 4,
+                    "USE_PORT_OPTIMISED_TASK_SELECTION": false,
+                    "MAX_PRIORITIES": 7,
+                    "TIMER_QUEUE_LENGTH": 10,
+                    "MEMORY_ALLOCATION": "DYNAMIC",
+                    "USE_TASK_NOTIFICATIONS": false,
+                    "TIMER_TASK_PRIORITY": 3,
+                    "HEAP_NUMBER": "heap_4",
+                    "TICK_RATE_HZ": 100
+                  },
+                  "Include_Parameters": {
+                    "vTaskPrioritySet": false,
+                    "pcTaskGetTaskName": false,
+                    "xSemaphoreGetMutexHolder": false,
+                    "xTaskGetSchedulerState": false,
+                    "uxTaskPriorityGet": false,
+                    "vTaskDelete": false,
+                    "vTaskCleanUpResources": false,
+                    "vTaskDelayUntil": false,
+                    "vTaskDelay": false
+                  }
+                }
+              ]
+            }
+          }
+        }
+      ],
+      "STMicroelectronics::Device:STM32 HAL Code Gen:LWIP Init@0.1.0": [
+        {
+          "instanceid": 7,
+          "name": "LwIP",
+          "settings": {
+            "resources": {
+              "ethernet": {
+                "id": "peripheral.lwip",
+                "name": "An Example LwIP"
+              }
+            },
+            "blocks": {
+              "info": {
+                "label": "Information",
+                "init_type": "called"
+              },
+              "configs": [
+                {
+                  "cfg_name": "Init",
+                  "general_settings": {
+                    "lwip_version": {
+                      "LwIP Version": "2.1.2"
+                    },
+                    "ipv4_dhcp_options": {
+                      "LWIP_DHCP": false
+                    },
+                    "ip_address_settings": {
+                      "IP_ADDRESS": [127, 0, 0, 1],
+                      "GATEWAY_ADDRESS": [0, 0, 0, 0],
+                      "NETMASK_ADDRESS": [255, 255, 255, 0]
+                    }
+                  }
+                },
+                {
+                  "cfg_name": "Low-Power",
+                  "general_settings": {
+                    "lwip_version": {
+                      "LwIP Version": "2.1.2"
+                    }
+                  }
+                }
+              ]
+            }
+          }
+        }
+      ],
+      "STMicroelectronics.STM32U5xx_Drivers.2.0.0-alpha.0.12$STMicroelectronics::Device:STM32 HAL Code Gen:CRC Init@0.1.0#HAL System Init and CRC": [
+        {
+          "instanceid": 8,
+          "name": "CRC",
+          "settings": {
+            "resources": {
+              "instance": {
+                "id": "CRC",
+                "digitalName": "c7amba_integtest1",
+                "resourceType": "peripheral.crc",
+                "version": "v2_3",
+                "features": {
+                  "fullPoly": 1
+                }
+              }
+            },
+            "blocks": {
+              "configs": [
+                {
+                  "CRC_InitTypeDef": {
+                    "DefaultPolynomialUse": false,
+                    "DefaultInitValueUse": false,
+                    "InputDataFormat": "CRC_INPUTDATA_FORMAT_BYTES"
+                  }
+                }
+              ]
+            }
+          }
+        }
+      ],
+      "STMicroelectronics.STM32U5xx_Drivers.2.0.0-alpha.0.12$STMicroelectronics::Device:STM32 HAL Code Gen:UART Init@0.1.0#HAL UART Init": [
+        {
+          "instanceid": 9,
+          "name": "UART",
+          "settings": {
+            "resources": {
+              "instance": {
+                "id": "LPUART1",
+                "digitalName": "c7amba_sci3",
+                "resourceType": "peripheral.lpuart",
+                "version": "v3_1",
+                "features": {
+                  "synchronous": false,
+                  "asynchronous": true,
+                  "fifoSize": 8,
+                  "spiSlave": false,
+                  "autoBaudrateDetection": false,
+                  "driverEnable": true,
+                  "halfDuplex": true,
+                  "hwFlowControl": true,
+                  "lin": false,
+                  "wakeUpFromStop": true,
+                  "irda": false,
+                  "smartcard": false,
+                  "baudgentype": true,
+                  "dualClock": true,
+                  "autonomous": true
+                }
+              }
+            },
+            "blocks": {
+              "configs": [
+                {
+                  "cfg_name": "Async",
+                  "UART_InitTypeDef": {
+                    "BaudRate": 115200,
+                    "WordLength": "UART_WORDLENGTH_8B",
+                    "StopBits": "UART_STOPBITS_1",
+                    "Parity": "UART_PARITY_NONE",
+                    "Mode": "UART_MODE_TX_RX",
+                    "OverSampling": "UART_OVERSAMPLING_16",
+                    "ClockPrescaler": "UART_PRESCALER_DIV1"
+                  },
+                  "UART_AdvFeatureInitTypeDef": {
+                    "OverrunDisable": "UART_ADVFEATURE_OVERRUN_ENABLE",
+                    "DMADisableonRxError": "UART_ADVFEATURE_DMA_ENABLEONRXERROR",
+                    "AutoBaudRateEnable": "UART_ADVFEATURE_AUTOBAUDRATE_DISABLE",
+                    "AutoBaudRateMode": "UART_ADVFEATURE_AUTOBAUDRATE_ONSTARTBIT",
+                    "MSBFirst": "UART_ADVFEATURE_MSBFIRST_DISABLE"
+                  }
+                }
+              ]
+            }
+          }
+        }
+      ],
+      "STMicroelectronics.STM32U5xx_Drivers.2.0.0-alpha.0.12$STMicroelectronics::Device:STM32 HAL Code Gen:TIM Init@0.1.0#HAL TIM Init": [
+        {
+          "instanceid": 10,
+          "name": "TIM",
+          "settings": {
+            "resources": {
+              "instance": {
+                "id": "TIM1",
+                "digitalName": "c7amba_gptimer2",
+                "resourceType": "peripheral.tim",
+                "version": "v4_2",
+                "configName": "PWM",
+                "features": {
+                  "nb_of_cc": 6,
+                  "nb_of_dt": 4,
+                  "nb_of_sm": 1,
+                  "rcr_impl": 2,
+                  "etr_impl": 3,
+                  "bk_impl": 3,
+                  "dma_impl": 2,
+                  "cnt_dir": 2,
+                  "psc_linear": 1,
+                  "psc_width16": 1,
+                  "cnt_width": 16,
+                  "optionreg_out": 0,
+                  "is_tim_cc1_instance": 1,
+                  "is_tim_cc2_instance": 1,
+                  "is_tim_cc3_instance": 1,
+                  "is_tim_cc4_instance": 1,
+                  "is_tim_cc5_instance": 1,
+                  "is_tim_cc6_instance": 1,
+                  "is_tim_cc1n_instance": 1,
+                  "is_tim_cc2n_instance": 1,
+                  "is_tim_cc3n_instance": 1,
+                  "is_tim_cc4n_instance": 1
+                }
+              }
+            },
+            "blocks": {
+              "configs": [
+                {
+                  "TIM_Base_InitTypeDef": {
+                    "Prescaler": 0,
+                    "CounterMode": "TIM_COUNTERMODE_UP",
+                    "Period": 65535
+                  },
+                  "TIM_modes": {
+                    "controller_mode": true
+                  }
+                }
+              ]
+            }
+          }
+        }
+      ]
+    }
+  }
+  

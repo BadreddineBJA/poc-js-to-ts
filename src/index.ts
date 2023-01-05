@@ -1,7 +1,8 @@
 import * as hbs from "handlebars";
-import { ClockAPI } from "@prg-cube/clock-configuration-model/lib/code-gen-helpers/ClockAPI";
 import { PinoutAPI } from "@prg-cube/pinout-model/lib/code-gen/index";
+import { ClockAPI } from '@prg-cube/clock-configuration-model/lib/code-gen-helpers/ClockAPI'
 import * as path from "path";
+
 
 // [1]- prepare template:
 const template = `
@@ -40,7 +41,7 @@ const data = {
       frequency: 6000000,
     },
     {
-      id: "RTC_Clock_Source", 
+      id: "RTC_Clock_Source",
       value: 48000,
       frequency: 48000,
     },
@@ -60,24 +61,53 @@ let helpersListContent = Object.entries(fileContent);
 for (let [key, value] of helpersListContent) {
   hbs.registerHelper(key, value as hbs.HelperDelegate);
 }
-
 const templateFunc = hbs.compile(template);
-// [4] write the output. 
+// [4] write the output.
 const output = templateFunc(data);
-
-
-// [5] Getters access from helpers: 
+// [5] Getters access from helpers:
 /**
- * 1. is it possible to get the list of domain getters. 
+ * 1. is it possible to get the list of domain getters.
  * 2. is it possible to access the call getters methods from .js helpers.
- * 3. main limitations for getters that depends on the appprojpath. 
+ * 3. main limitations for getters that depends on the appprojpath.
  */
+
 console.log("value ==> ", output);
 console.log("GETTERS");
-console.log('ClockAPI', new ClockAPI("").LoadGetters()); 
-console.log('PinoutAPI', new PinoutAPI("").LoadGetters().pinoutAPI.getHwInstanceSignalsConfig()); 
+const appProjPath = path.join(
+  __dirname,
+  "../src/scripts/app/app.csolution.yml"
+);
+
+loadGetters();
 
 
- /**
-  * 
-  */
+async function loadGetters()
+{
+  try{
+    console.log('API getters', appProjPath)
+    // Getters subject to be analyzed
+    // some limitations on the Getters side
+    const pinoutAPIObject =  await PinoutAPI.InitializePinoutDomainAPI(appProjPath);
+    const pinoutAPI = pinoutAPIObject.LoadGetters();
+    const configurations =  pinoutAPI.pinoutAPI.getDomain();
+    console.log("pinout configuration", JSON.stringify(configurations.default));
+    
+    // Clock Getters
+    const clockAPI = new ClockAPI(appProjPath);
+    await clockAPI.getDomain();
+    const clockGetters = clockAPI.LoadGetters() as any;
+    // API method to get the clock settings for a given application project,
+    console.log(
+      "clock domain",
+      JSON.stringify(clockGetters.clockAPI.getClockDomain)
+    ); 
+  }catch(error)
+  {
+    console.log("ERROR", error);
+    
+  }
+
+
+
+
+}

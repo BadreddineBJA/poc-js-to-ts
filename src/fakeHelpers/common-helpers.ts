@@ -1,6 +1,6 @@
 import { IConfig, IResultOutput } from "./interfaces";
 
-export function addConfig(str: string) {
+  export function addConfig(str: string) {
     if (str && typeof str === "string") {
       return "_" + str;
     }
